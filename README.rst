@@ -5,7 +5,7 @@ We designed the Raspberry Pi Spark Shield board allows you to more easily develo
 
 Key Features:
 
-* 128x64 OLED
+* 128x64 monochrome OLED
 * Accelerometer
 * Gyro
 * Thermometer
@@ -19,12 +19,16 @@ Drives:
 
 * SSD1306 compatible OLED display 
 	- Provides screen flipping settings and increase display data transfer rate
+
 * MPU6050 Gyroscope, Accelerometer, Thermometer Sensor
 	- Motion Detection Interrupt, Sleep Mode, Independent Sensor On
+
 * GPIO Buttons
 	- Interrupt Support, Polling Support
+
 * Audio
 	- Provides audio output switch that can play back MP3, WAV, etc. music formats via headphones or speakers
+
 * PWM Tone Player
 	- PWM generates pitch and plays
 
@@ -47,13 +51,14 @@ History:
 * v1.0	2018.6	first released
 
 
-Written by Kunpeng Zhang for mobiNRG.
+Drive Example:
+* http://github.com/PowerRocker/rpi_spark_examples
+* http://www.mobinrg.com/resources/rpi_spark/spark_examples.zip
+
+
+Written by Kunpeng Zhang.
 MIT license, all text above must be included in any redistribution
 
-
-Drive Example:
-1. http://github.com/PowerRocker/rpi_spark_examples
-2. http://www.mobinrg.com/resources/rpi_spark/spark_examples.zip
 
 
 
@@ -66,7 +71,7 @@ Drive Example:
 
 火花扩展板设计包含:
 
-* 128x64 OLED 显示屏
+* 显示屏: 128x64 单色 OLED
 * 陀螺仪
 * 加速计
 * 温度计
@@ -102,18 +107,26 @@ Drive Example:
 * Raspberry Pi Zero W
 
 
+系统要求:
+
+* Linux
+* Python 2.7 or Python 3.x
+
 版本历史:
 
 * v1.0	2018.6	第一次发布
 
 
+驱动示例代码:
+
+* http://github.com/PowerRocker/rpi_spark_examples
+* http://www.mobinrg.com/resources/rpi_spark/spark_examples.zip
+
 由 Kunpeng Zhang 撰写。
 MIT许可证，上述所有文本必须包含在任何重新发布中
 
 
-驱动示例代码:
-1. http://github.com/PowerRocker/rpi_spark_examples
-2. http://www.mobinrg.com/resources/rpi_spark/spark_examples.zip
+
 
 =======================
  Chinese ( Traditional )
@@ -124,7 +137,7 @@ MIT许可证，上述所有文本必须包含在任何重新发布中
 
 火花擴展板設計包含:
 
-* 128x64 OLED 顯示屏
+* 顯示屏: 128x64 單色 OLED
 * 陀螺儀
 * 加速計
 * 溫度計
@@ -154,6 +167,7 @@ MIT许可证，上述所有文本必须包含在任何重新发布中
 
 
 支持的樹梅派：
+
 * Raspberry Pi 2 / 3 / 3+
 * Raspberry Pi Zero
 * Raspberry Pi Zero W
@@ -164,11 +178,19 @@ MIT许可证，上述所有文本必须包含在任何重新发布中
 * v1.0 2018.6 第一次發布
 
 
-由 Kunpeng Zhang 撰寫。
-MIT許可證，上述所有文本必須包含在任何重新發布中
+系統需求:
+
+* Linux
+* Python 2.7 or Python 3.x
 
 
 驅動示例源碼:
-1. http://github.com/PowerRocker/rpi_spark_examples
-2. http://www.mobinrg.com/resources/rpi_spark/spark_examples.zip
+
+* http://github.com/PowerRocker/rpi_spark_examples
+* http://www.mobinrg.com/resources/rpi_spark/spark_examples.zip
+
+
+由 Kunpeng Zhang 撰寫。
+MIT許可證，上述所有文本必須包含在任何重新發布中
+
 
