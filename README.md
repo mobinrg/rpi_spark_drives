@@ -54,12 +54,11 @@ MIT license, all text above must be included in any redistribution
 
 
 Drive Example:
-1. http://github.com/PowerRocker/rpi_spark_examples
+1. http://github.com/powerrocker/rpi_spark_examples
 2. http://mobinrg.com/resources/rpi_spark/spark_examples.zip
 
 
 
-=======================
  Chinese ( Simplified )
 =======================
 树梅派 ZERO Spark 火花扩展板 Python 驱动库
@@ -117,7 +116,7 @@ MIT许可证，上述所有文本必须包含在任何重新发布中
 1. http://github.com/PowerRocker/rpi_spark_examples
 2. http://mobinrg.com/resources/rpi_spark/spark_examples.zip
 
-=======================
+
  Chinese ( Traditional )
 =======================
 樹梅派 ZERO Spark 火花擴展板 Python 驅動庫
@@ -171,6 +170,6 @@ MIT許可證，上述所有文本必須包含在任何重新發布中
 
 
 驅動示例源碼:
-1. http://github.com/rpi_spark/spark_examples
+1. http://github.com/PowerRocker/rpi_spark_examples
 2. http://mobinrg.com/resources/rpi_spark/spark_examples.zip
 
