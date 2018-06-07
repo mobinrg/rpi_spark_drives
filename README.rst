@@ -1,7 +1,7 @@
 RPi Spark Python Drives
 =======================
 
-We designed the Raspberry Pi Spark Shield board allows you to more easily develop interesting applications through the GPIO of Raspberry Pi.
+We designed the Raspberry Pi Spark Shield board allows you to easily develop interesting applications through the GPIO of Raspberry Pi.
 
 Key Features:
 
@@ -52,6 +52,7 @@ History:
 
 
 Drive Example:
+
 * http://github.com/PowerRocker/rpi_spark_examples
 * http://www.mobinrg.com/resources/rpi_spark/spark_examples.zip
 

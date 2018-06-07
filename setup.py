@@ -47,7 +47,7 @@ setup (
 	license           = 'MIT',
 	classifiers       = classifiers,
 	keywords	  = keywords,
-	url               = 'https://github.com/junglemetal/JMRPi_Spark/',
+	url               = 'https://github.com/PowerRocker/rpi_spark_drives',
 	dependency_links  = [],
 	install_requires  = [],
 	packages          = find_packages( include = ("examples") )
