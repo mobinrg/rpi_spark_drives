@@ -44,7 +44,7 @@ Requirements:
 
 History:
 
-* v1.0	2018.5	first released
+* v1.0	2018.6	first released
 
 
 Written by Kunpeng Zhang for mobiNRG.
@@ -52,8 +52,8 @@ MIT license, all text above must be included in any redistribution
 
 
 Drive Example:
-1. http://github.com/rpi_spark/spark_examples
-2. http://mobinrg.com/resources/rpi_spark/spark_examples.zip
+1. http://github.com/PowerRocker/rpi_spark_examples
+2. http://www.mobinrg.com/resources/rpi_spark/spark_examples.zip
 
 
 
@@ -62,9 +62,9 @@ Drive Example:
 =======================
 树梅派 ZERO Spark 火花扩展板 Python 驱动库
 
-我们设计的树梅派火花扩展板能让您更轻松的通过树梅派 GPIO 开发有趣的应用。
+我们设计的树梅派火花扩展板让您更轻松的通过树梅派 GPIO 开发有趣的应用。
 
-此扩展板设计包含:
+火花扩展板设计包含:
 
 * 128x64 OLED 显示屏
 * 陀螺仪
@@ -104,25 +104,25 @@ Drive Example:
 
 版本历史:
 
-* v1.0	2018.5	第一次发布
+* v1.0	2018.6	第一次发布
 
 
-由 Kunpeng Zhang 为 mobiNRG 撰写。
+由 Kunpeng Zhang 撰写。
 MIT许可证，上述所有文本必须包含在任何重新发布中
 
 
 驱动示例代码:
-1. http://github.com/rpi_spark/spark_examples
-2. http://mobinrg.com/resources/rpi_spark/spark_examples.zip
+1. http://github.com/PowerRocker/rpi_spark_examples
+2. http://www.mobinrg.com/resources/rpi_spark/spark_examples.zip
 
 =======================
  Chinese ( Traditional )
 =======================
 樹梅派 ZERO Spark 火花擴展板 Python 驅動庫
 
-我們設計的樹梅派火花擴展板能讓您更輕鬆的通過樹梅派 GPIO 開發有趣的應用。
+我們設計的樹梅派火花擴展板讓您更輕鬆的通過樹梅派 GPIO 開發有趣的應用。
 
-此擴展板設計包含:
+火花擴展板設計包含:
 
 * 128x64 OLED 顯示屏
 * 陀螺儀
@@ -161,14 +161,14 @@ MIT许可证，上述所有文本必须包含在任何重新发布中
 
 版本歷史:
 
-* v1.0 2018.5 第一次發布
+* v1.0 2018.6 第一次發布
 
 
-由 Kunpeng Zhang 为 mobiNRG 撰寫。
+由 Kunpeng Zhang 撰寫。
 MIT許可證，上述所有文本必須包含在任何重新發布中
 
 
 驅動示例源碼:
-1. http://github.com/rpi_spark/spark_examples
-2. http://mobinrg.com/resources/rpi_spark/spark_examples.zip
+1. http://github.com/PowerRocker/rpi_spark_examples
+2. http://www.mobinrg.com/resources/rpi_spark/spark_examples.zip
 
