@@ -1,6 +1,5 @@
 # RPi Spark Python Drives
 
-=======================
  English
 =======================
 
