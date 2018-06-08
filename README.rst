@@ -1,13 +1,13 @@
 RPi Spark Python Drives
-=======================
+===========================
 
-We designed the Raspberry Pi Spark Shield board allows you to easily develop interesting applications through the GPIO of Raspberry Pi.
+The Raspberry Pi Spark Shield allows you to easily develop interesting applications through the GPIO of Raspberry Pi.
 
-Key Features:
+Spark Shield Key Features:
 
 * 128x64 monochrome OLED
-* Accelerometer
-* Gyro
+* Accelerometers
+* Gyroscopes
 * Thermometer
 * 5-way joystick
 * 2 action buttons
@@ -20,8 +20,8 @@ Drives:
 * SSD1306 compatible OLED display 
 	- Provides screen flipping settings and increase display data transfer rate
 
-* MPU6050 Gyroscope, Accelerometer, Thermometer Sensor
-	- Motion Detection Interrupt, Sleep Mode, Independent Sensor On
+* MPU6050 Gyroscopes, Accelerometers and Thermometer Sensors
+	- Motion Detection Interrupt, Sleep Mode and independent Trun-ON sensor
 
 * GPIO Buttons
 	- Interrupt Support, Polling Support

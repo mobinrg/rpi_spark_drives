@@ -1,5 +1,5 @@
 
-import JMRPiSSPILScreen
+from .JMRPiSSPILScreen import SSPILScreen
 
 class SScreenILI9341( JMRPiSSPILScreen.SSPILScreen ):
     """This class work with PIL Lib.

@@ -32,7 +32,7 @@
 import RPi.GPIO as GPIO
 import spidev
 from PIL import Image
-import JMRPiDisplay
+from .JMRPiDisplay import SSDiaplayBase
 
 CMD_SSD1306_SET_MEM_ADDR_MODE       = 0x20
 CMD_SSD1306_SET_COLUMN_ADDR         = 0x21
@@ -89,7 +89,7 @@ CMD_SSD1306_SET_SCROLL_HORIZONTAL_VERTICAL_LEFT  = 0x2A
 CMD_SSD1306_SET_SCROLL_VERTICAL_AREA= 0xA3
 
 
-class SSD1306Base( JMRPiDisplay.SSDiaplayBase ):
+class SSD1306Base( SSDiaplayBase ):
     #mirror horizontal
     _mirror_h = 0
     #mirror vertical

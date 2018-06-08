@@ -38,7 +38,7 @@ desc = 'We designed the Raspberry Pi Spark Shield board allows you to easily dev
 
 setup (
 	name              = 'JMRPi.Spark',
-	version           = '1.0.0',
+	version           = '1.0.2',
 	author            = 'Kunpeng Zhang',
 	author_email      = 'kenz@mobinrg.com',
 	description       = desc,
@@ -50,5 +50,5 @@ setup (
 	url               = 'https://github.com/PowerRocker/rpi_spark_drives',
 	dependency_links  = [],
 	install_requires  = [],
-	packages          = find_packages( include = ("examples") )
+	packages          = find_packages()
 )

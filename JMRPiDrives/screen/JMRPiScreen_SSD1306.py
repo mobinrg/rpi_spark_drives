@@ -32,9 +32,9 @@
 #    使用 SSD1306 芯片驱动的 OLED 显示屏
 #
 
-import JMRPiSSPILScreen
+from .JMRPiSSPILScreen import SSPILScreen
 
-class SScreenSSD1306( JMRPiSSPILScreen.SSPILScreen ):
+class SScreenSSD1306( SSPILScreen ):
     """This class work with PIL Lib.
     """
 

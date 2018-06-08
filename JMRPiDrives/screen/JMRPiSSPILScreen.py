@@ -37,9 +37,10 @@ import PIL
 from PIL import Image
 from PIL import ImageDraw
 
-import JMRPiScreenBase
+from .JMRPiScreenBase import SScreenBase
+from .JMRPiScreenBase import SSRect
 
-class SSPILScreen( JMRPiScreenBase.SScreenBase ):
+class SSPILScreen( SScreenBase ):
     """This class work with PIL Image Lib.
     """
 
@@ -69,7 +70,7 @@ class SSPILScreen( JMRPiScreenBase.SScreenBase ):
         self.Canvas = ImageDraw.Draw( self._buffer )
 
         #creare screen view
-        self.View = JMRPiScreenBase.SSRect( 0, 0, self._display_size[0], self._display_size[1] )
+        self.View = SSRect( 0, 0, self._display_size[0], self._display_size[1] )
         pass
 
     def getBufferSize(self):
