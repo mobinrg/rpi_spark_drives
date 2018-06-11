@@ -30,23 +30,23 @@ keywords = (
 	"joystick game"
 	"audio speaker headset headphone earphone"
 	"pwm tone"
-	"mp3 wave"
+	"ogg mp3 wave"
 	"gpio extended pads"
 )
 
-desc = 'We designed the Raspberry Pi Spark Shield board allows you to easily develop interesting applications use the GPIO of Raspberry Pi. It included SSD1306 128x64 OLED, MPU6050 Sensor (Gyroscope, Accelerometer, Thermometer Sensor), 5 ways joystick, 2 action keys, 3.5mm stereo headphone jack, Speaker and 20 extended GPIO pads'
+desc = 'The Raspberry Pi Spark Shield board allows you to easily develop interesting applications use the GPIO of Raspberry Pi. It included SSD1306 128x64 OLED, MPU6050 Sensor (Gyroscope, Accelerometer, Thermometer Sensor), 5 ways joystick, 2 action keys, 3.5mm stereo headphone jack, Speaker and 20 extended GPIO pads'
 
 setup (
 	name              = 'JMRPi.Spark',
-	version           = '1.0.2',
+	version           = '1.0.3',
 	author            = 'Kunpeng Zhang',
 	author_email      = 'kenz@mobinrg.com',
 	description       = desc,
 	long_description  = desc,
-	platforms	  = ['Linux'],
+	platforms		  = ['Linux'],
 	license           = 'MIT',
-	classifiers       = classifiers,
-	keywords	  = keywords,
+	classifiers        = classifiers,
+	keywords	  	  = keywords,
 	url               = 'https://github.com/PowerRocker/rpi_spark_drives',
 	dependency_links  = [],
 	install_requires  = [],

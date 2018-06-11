@@ -32,7 +32,7 @@
 import RPi.GPIO as GPIO
 import spidev
 
-class SSDiaplayBase:
+class RPiDiaplay:
     width = 0
     height = 0
 

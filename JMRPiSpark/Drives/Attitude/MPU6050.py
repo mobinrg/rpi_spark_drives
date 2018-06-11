@@ -37,7 +37,7 @@ DEF_MPU6050_ADDRESS = 0x68
 # Earth Gravitiy
 GRAVITIY_EARTH  = 9.80665
 
-class mpu6050:
+class MPU6050:
     # Scale Modifiers
     ACCEL_SCALE_MODIFIER_2G = 16384.0
     ACCEL_SCALE_MODIFIER_4G = 8192.0
@@ -371,8 +371,7 @@ class mpu6050:
     def readGyroRange( self ):
         """Reads the range the gyroscope is set to.
 
-        If raw is True, it will return the raw value from the GYRO_CONFIG
-        register.
+        If raw is True, it will return the raw value from the GYRO_CONFIG register.
         If raw is False, it will return 250, 500, 1000, 2000 or -1. If the
         returned value is equal to -1 something went wrong.
         """

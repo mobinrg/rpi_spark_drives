@@ -24,7 +24,7 @@
 #
 # #########################################################
 #
-#    JMRPi OLED display ssd1306
+#    RPi OLED display ssd1306
 #    by Kunpeng Zhang
 #    v1.0.0    2018.3.20
 #
@@ -32,64 +32,69 @@
 import RPi.GPIO as GPIO
 import spidev
 from PIL import Image
-from .JMRPiDisplay import SSDiaplayBase
+from .RPiDisplay import RPiDiaplay
 
-CMD_SSD1306_SET_MEM_ADDR_MODE       = 0x20
-CMD_SSD1306_SET_COLUMN_ADDR         = 0x21
-CMD_SSD1306_SET_PAGE_ADDR           = 0x22
-CMD_SSD1306_SET_DISPLAY_START_LINE  = 0x40  # 0x40(0) ~ 0x7F(63)
-CMD_SSD1306_SET_CONTRAST            = 0x81  # 0x00~0xFF
-CMD_SSD1306_SET_SEGMENT_REMAP_0     = 0xA0
-CMD_SSD1306_SET_SEGMENT_REMAP_1     = 0xA1
-CMD_SSD1306_ENTIRE_DISPLAY_ON_0     = 0xA4
-CMD_SSD1306_ENTIRE_DISPLAY_ON_1     = 0xA5
-CMD_SSD1306_NORMAL_DISPLAY          = 0xA6
-CMD_SSD1306_INVERSE_DISPLAY         = 0xA7
-CMD_SSD1306_SET_MULTIPLEX_RATIO     = 0xA8
-CMD_SSD1306_DISPLAY_OFF             = 0xAE
-CMD_SSD1306_DISPLAY_ON              = 0xAF
-CMD_SSD1306_CHARGE_PUMP             = 0x8D
-# CMD_SSD1306_SET_START_ADDR_PAGE_ADDR_MODE
-CMD_SSD1306_SCAN_DIRECTION_INC      = 0xC0
-CMD_SSD1306_SCAN_DIRECTION_DEC      = 0xC8
-CMD_SSD1306_SET_DISPLAY_OFFSET      = 0xD3
-CMD_SSD1306_SET_CLOCK_DIVIDE_RATIO  = 0xD5
-CMD_SSD1306_SET_PRECHARGE           = 0xD9
-CMD_SSD1306_SET_COM_PINS            = 0xDA
-CMD_SSD1306_SET_DESELECT_LEVEL      = 0xDB
-
-#Graphic Acceleration Command
-
-# This command stops the motion of scrolling. After sending 2Eh command to deactivate the scrolling action,
-# the ram data needs to be rewritten.
-CMD_SSD1306_SET_SCROLL_DEACTIVE     = 0x2E
-
-# This command starts the motion of scrolling and should only be issued after the scroll setup parameters have
-# been defined by the scrolling setup commands :26h/27h/29h/2Ah . The setting in the last scrolling setup
-# command overwrites the setting in the previous scrolling setup commands.
-CMD_SSD1306_SET_SCROLL_ACTIVE       = 0x2F
-
-# This command consists of consecutive bytes to set up the horizontal scroll parameters and determines the
-# scrolling start page, end page and scrolling speed.
-CMD_SSD1306_SET_SCROLL_HORIZONTAL_RIGHT  = 0x26
-CMD_SSD1306_SET_SCROLL_HORIZONTAL_LEFT = 0x27
-
-# This command consists of 6 consecutive bytes to set up the continuous vertical scroll parameters and
-# determines the scrolling start page, end page, scrolling speed and vertical scrolling offset.
-# The bytes B[2:0], C[2:0] and D[2:0] of command 29h/2Ah are for the setting of the continuous horizontal
-# scrolling. The byte E[5:0] is for the setting of the continuous vertical scrolling offset. All these bytes together
-# are for the setting of continuous diagonal (horizontal + vertical) scrolling. If the vertical scrolling offset byte
-# E[5:0] is set to zero, then only horizontal scrolling is performed (like command 26/27h).
-CMD_SSD1306_SET_SCROLL_HORIZONTAL_VERTICAL_RIGHT = 0x29
-CMD_SSD1306_SET_SCROLL_HORIZONTAL_VERTICAL_LEFT  = 0x2A
-
-# This command consists of 3 consecutive bytes to set up the vertical scroll area. For the continuous vertical
-# scroll function (command 29/2Ah), the number of rows that in vertical scrolling can be set smaller or equal to
-# the MUX ratio.
-CMD_SSD1306_SET_SCROLL_VERTICAL_AREA= 0xA3
-
-
-class SSD1306Base( SSDiaplayBase ):
+class SSD1306Base( RPiDiaplay ):
+    CMD_SSD1306_SET_MEM_ADDR_MODE       = 0x20
+    CMD_SSD1306_SET_COLUMN_ADDR         = 0x21
+    CMD_SSD1306_SET_PAGE_ADDR           = 0x22
+    CMD_SSD1306_SET_DISPLAY_START_LINE  = 0x40  # 0x40(0) ~ 0x7F(63)
+    CMD_SSD1306_SET_CONTRAST            = 0x81  # 0x00~0xFF
+    CMD_SSD1306_SET_SEGMENT_REMAP_0     = 0xA0
+    CMD_SSD1306_SET_SEGMENT_REMAP_1     = 0xA1
+    CMD_SSD1306_ENTIRE_DISPLAY_ON_0     = 0xA4
+    CMD_SSD1306_ENTIRE_DISPLAY_ON_1     = 0xA5
+    CMD_SSD1306_NORMAL_DISPLAY          = 0xA6
+    CMD_SSD1306_INVERSE_DISPLAY         = 0xA7
+    CMD_SSD1306_SET_MULTIPLEX_RATIO     = 0xA8
+    CMD_SSD1306_DISPLAY_OFF             = 0xAE
+    CMD_SSD1306_DISPLAY_ON              = 0xAF
+    CMD_SSD1306_CHARGE_PUMP             = 0x8D
+    # CMD_SSD1306_SET_START_ADDR_PAGE_ADDR_MODE
+    CMD_SSD1306_SCAN_DIRECTION_INC      = 0xC0
+    CMD_SSD1306_SCAN_DIRECTION_DEC      = 0xC8
+    CMD_SSD1306_SET_DISPLAY_OFFSET      = 0xD3
+    CMD_SSD1306_SET_CLOCK_DIVIDE_RATIO  = 0xD5
+    CMD_SSD1306_SET_PRECHARGE           = 0xD9
+    CMD_SSD1306_SET_COM_PINS            = 0xDA
+    CMD_SSD1306_SET_DESELECT_LEVEL      = 0xDB
+    
+    #Graphic Acceleration Command
+    
+    # This command stops the motion of scrolling. After sending 2Eh command to 
+    # deactivate the scrolling action, the ram data needs to be rewritten. 
+    CMD_SSD1306_SET_SCROLL_DEACTIVE     = 0x2E
+    
+    # This command starts the motion of scrolling and should only be issued after 
+    # the scroll setup parameters have been defined by the scrolling setup 
+    # commands:26h/27h/29h/2Ah . The setting in the last scrolling setup
+    # command overwrites the setting in the previous scrolling setup commands.
+    CMD_SSD1306_SET_SCROLL_ACTIVE       = 0x2F
+    
+    # This command consists of consecutive bytes to set up the horizontal scroll 
+    # parameters and determines the scrolling start page, end page and scrolling
+    # speed.
+    CMD_SSD1306_SET_SCROLL_HORIZONTAL_RIGHT  = 0x26
+    CMD_SSD1306_SET_SCROLL_HORIZONTAL_LEFT = 0x27
+    
+    # This command consists of 6 consecutive bytes to set up the continuous 
+    # vertical scroll parameters and determines the scrolling start page, end 
+    # page, scrolling speed and vertical scrolling offset. 
+    # The bytes B[2:0], C[2:0] and D[2:0] of command 29h/2Ah are for the setting 
+    # of the continuous horizontal scrolling. The byte E[5:0] is for the setting 
+    # of the continuous vertical scrolling offset. All these bytes together are 
+    # for the setting of continuous diagonal (horizontal + vertical) scrolling. 
+    # If the vertical scrolling offset byte E[5:0] is set to zero, then only 
+    # horizontal scrolling is performed (like command 26/27h).
+    CMD_SSD1306_SET_SCROLL_HORIZONTAL_VERTICAL_RIGHT = 0x29
+    CMD_SSD1306_SET_SCROLL_HORIZONTAL_VERTICAL_LEFT  = 0x2A
+    
+    # This command consists of 3 consecutive bytes to set up the vertical scroll 
+    # area. For the continuous vertical
+    # scroll function (command 29/2Ah), the number of rows that in vertical 
+    # scrolling can be set smaller or equal to the MUX ratio.
+    CMD_SSD1306_SET_SCROLL_VERTICAL_AREA= 0xA3
+    
     #mirror horizontal
     _mirror_h = 0
     #mirror vertical
@@ -112,9 +117,9 @@ class SSD1306Base( SSDiaplayBase ):
     def _display_buffer(self, buffer ):
         """Send buffer data to physical display."""
         self._command([
-            CMD_SSD1306_SET_COLUMN_ADDR,
+            self.CMD_SSD1306_SET_COLUMN_ADDR,
             0, self.width-1,
-            CMD_SSD1306_SET_PAGE_ADDR,
+            self.CMD_SSD1306_SET_PAGE_ADDR,
             0, self._mem_pages - 1
             ])
         self._data( buffer )
@@ -122,47 +127,47 @@ class SSD1306Base( SSDiaplayBase ):
     def _init_display(self):
         self._command([
             # 0xAE
-            CMD_SSD1306_DISPLAY_OFF,
+            self.CMD_SSD1306_DISPLAY_OFF,
             #Stop Scroll
-            CMD_SSD1306_SET_SCROLL_DEACTIVE,
+            self.CMD_SSD1306_SET_SCROLL_DEACTIVE,
             # 0xA8 SET MULTIPLEX 0x3F
-            CMD_SSD1306_SET_MULTIPLEX_RATIO,
+            self.CMD_SSD1306_SET_MULTIPLEX_RATIO,
             0x3F,
             # 0xD3 SET DISPLAY OFFSET
-            CMD_SSD1306_SET_DISPLAY_OFFSET,
+            self.CMD_SSD1306_SET_DISPLAY_OFFSET,
             0x00,
             # 0x40 Set Mapping RAM Display Start Line  (0x00~0x3F)
-            CMD_SSD1306_SET_DISPLAY_START_LINE,
+            self.CMD_SSD1306_SET_DISPLAY_START_LINE,
             # 0xDA Set COM Pins hardware configuration, (0x00/0x01/0x02)
-            CMD_SSD1306_SET_COM_PINS,
+            self.CMD_SSD1306_SET_COM_PINS,
             (0x02 | 0x10),
-            CMD_SSD1306_SET_CONTRAST,
+            self.CMD_SSD1306_SET_CONTRAST,
             0x7F,
             # 0xA4 Disable Entire Display On
-            CMD_SSD1306_ENTIRE_DISPLAY_ON_0,
+            self.CMD_SSD1306_ENTIRE_DISPLAY_ON_0,
             # 0xA6 Set normal display
-            CMD_SSD1306_NORMAL_DISPLAY,
+            self.CMD_SSD1306_NORMAL_DISPLAY,
             # 0xA7 Set inverse display
             # CMD_SSD1306_INVERSE_DISPLAY, 
             # 0xD5 Set osc frequency 0x80
-            CMD_SSD1306_SET_CLOCK_DIVIDE_RATIO,
+            self.CMD_SSD1306_SET_CLOCK_DIVIDE_RATIO,
             0x80,
             # 0x8D Enable DC/DC charge pump regulator 0x14
-            CMD_SSD1306_CHARGE_PUMP,
+            self.CMD_SSD1306_CHARGE_PUMP,
             0x14,
             # 0x20 Set Page Addressing Mode (0x00/0x01/0x02)
-            CMD_SSD1306_SET_MEM_ADDR_MODE,
+            self.CMD_SSD1306_SET_MEM_ADDR_MODE,
             0x01,
   
             # 0xC0 / 0xC8 Set COM Output Scan Direction
             #CMD_SSD1306_SCAN_DIRECTION_INC,
             #CMD_SSD1306_SCAN_DIRECTION_DEC,
-            CMD_SSD1306_SCAN_DIRECTION_INC if self._mirror_v else CMD_SSD1306_SCAN_DIRECTION_DEC,
+            self.CMD_SSD1306_SCAN_DIRECTION_INC if self._mirror_v else self.CMD_SSD1306_SCAN_DIRECTION_DEC,
   
             # 0xA0 / oxA1 Set Segment re-map
             # 0xA0    left to right
             # 0xA1    right to left
-            CMD_SSD1306_SET_SEGMENT_REMAP_0 if self._mirror_h else CMD_SSD1306_SET_SEGMENT_REMAP_1,
+            self.CMD_SSD1306_SET_SEGMENT_REMAP_0 if self._mirror_h else self.CMD_SSD1306_SET_SEGMENT_REMAP_1,
         ])
 
     def init(self):
@@ -174,10 +179,10 @@ class SSD1306Base( SSDiaplayBase ):
         self._buffer = [ fill ] * ( self.width * self._mem_pages )
 
     def on(self):
-        self._command( [CMD_SSD1306_DISPLAY_ON] )
+        self._command( [self.CMD_SSD1306_DISPLAY_ON] )
 
     def off(self):
-        self._command( [CMD_SSD1306_DISPLAY_OFF] )
+        self._command( [self.CMD_SSD1306_DISPLAY_OFF] )
 
     def reset(self):
         """Reset display"""
@@ -189,10 +194,10 @@ class SSD1306Base( SSDiaplayBase ):
         GPIO.output( self._spi_reset, 1 )
 
     def setContrast(self, contrast):
-        self._command([CMD_SSD1306_SET_CONTRAST])
+        self._command([self.CMD_SSD1306_SET_CONTRAST])
         self._command([contrast])
 
-#         self._command([CMD_SSD1306_SET_CONTRAST, contrast])
+#         self._command([self.CMD_SSD1306_SET_CONTRAST, contrast])
         
     def setBrightness(self, brightness):
         raise ValueError("Has not brightness controller") 
@@ -205,8 +210,8 @@ class SSD1306Base( SSDiaplayBase ):
             self._display_buffer( self._buffer )
             
     def setImage(self, image):
-        """Convert image to the buffer, The image mode must be 1 and image size equal to the display size
-         image type is Python Imaging Library image.
+        """Convert image to the buffer, The image mode must be 1 and image size 
+        equal to the display size image type is Python Imaging Library image.
         """
         if image.mode != '1':
             raise ValueError('The image color must be in mode \"1\".')
@@ -230,10 +235,10 @@ class SSD1306Base( SSDiaplayBase ):
                 bi += 1
 
     def scrollOn(self):
-        self._command([CMD_SSD1306_SET_SCROLL_ACTIVE])
+        self._command([self.CMD_SSD1306_SET_SCROLL_ACTIVE])
         
     def scrollOff(self):
-        self._command([CMD_SSD1306_SET_SCROLL_DEACTIVE])
+        self._command([self.CMD_SSD1306_SET_SCROLL_DEACTIVE])
 
     def scrollWith(self, hStart = 0x00, hEnd=0x00, vOffset = 0x00, vStart=0x00, vEnd=0x00, int = 0x00, dire = "left" ):
         """Scroll screen
@@ -245,24 +250,24 @@ class SSD1306Base( SSDiaplayBase ):
             int: Set time interval between each scroll step
             dire: Set scroll direction, value can be "left" or "right"
         """
-        self._command( [CMD_SSD1306_SET_SCROLL_DEACTIVE] )
+        self._command( [self.CMD_SSD1306_SET_SCROLL_DEACTIVE] )
         if vOffset != 0:
             self._command( [
-                    CMD_SSD1306_SET_SCROLL_VERTICAL_AREA,
+                    self.CMD_SSD1306_SET_SCROLL_VERTICAL_AREA,
                     vStart,
                     vEnd,
                     0x00
                 ])
 
         self._command( [
-            CMD_SSD1306_SET_SCROLL_HORIZONTAL_VERTICAL_LEFT if dire.upper()=="LEFT" else CMD_SSD1306_SET_SCROLL_HORIZONTAL_VERTICAL_RIGHT,
+            self.CMD_SSD1306_SET_SCROLL_HORIZONTAL_VERTICAL_LEFT if dire.upper()=="LEFT" else self.CMD_SSD1306_SET_SCROLL_HORIZONTAL_VERTICAL_RIGHT,
             0x00, 
             hStart, 
             int, 
             hEnd, 
             vOffset, 
             0x00,
-            CMD_SSD1306_SET_SCROLL_ACTIVE
+            self.CMD_SSD1306_SET_SCROLL_ACTIVE
             ])
 
 

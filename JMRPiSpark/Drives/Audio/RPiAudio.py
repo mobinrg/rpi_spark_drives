@@ -34,7 +34,7 @@ import subprocess as sub
 PIN_MODE_AUDIO = "alt0"
 PIN_MODE_OUTPUT = "output"
 
-class SSAudioDevice:
+class RPiAudioDevice:
     channelR = None
     channelL = None
     

@@ -49,13 +49,14 @@ BUTTON_JOY_UP       = 5
 BUTTON_JOY_DOWN     = 6
 BUTTON_JOY_OK       = 24
 
+# UNIT: ms
 DEF_BOUNCE_TIME_SHORT_MON    = 10
 DEF_BOUNCE_TIME_SHORT    = 50
 DEF_BOUNCE_TIME_NORMAL   = 100
 DEF_BOUNCE_TIME_LONG     = 200
 
 #SparkKeyboard
-class SSKeyButtons :
+class RPiKeyButtons :
     """This RPi Spark Shield -- Key Buttons Drive
     """
     def __init__(self):

@@ -37,8 +37,8 @@ import PIL
 from PIL import Image
 from PIL import ImageDraw
 
-from .JMRPiScreenBase import SScreenBase
-from .JMRPiScreenBase import SSRect
+from .SScreen import SScreenBase
+from .SScreen import SSRect
 
 class SSPILScreen( SScreenBase ):
     """This class work with PIL Image Lib.

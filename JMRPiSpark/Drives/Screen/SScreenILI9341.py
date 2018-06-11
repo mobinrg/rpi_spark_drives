@@ -1,7 +1,7 @@
 
-from .JMRPiSSPILScreen import SSPILScreen
+from .SSPILScreen import SSPILScreen
 
-class SScreenILI9341( JMRPiSSPILScreen.SSPILScreen ):
+class SScreenILI9341( SSPILScreen ):
     """This class work with PIL Lib.
     """
 

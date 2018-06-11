@@ -32,7 +32,7 @@
 #    使用 SSD1306 芯片驱动的 OLED 显示屏
 #
 
-from .JMRPiSSPILScreen import SSPILScreen
+from .SSPILScreen import SSPILScreen
 
 class SScreenSSD1306( SSPILScreen ):
     """This class work with PIL Lib.
@@ -54,7 +54,7 @@ class SScreenSSD1306( SSPILScreen ):
         """
 
         try:
-            # suport for JMRPiDisplay SSD1306 driver
+            # suport for RPiDisplay SSD1306 driver
             self.Display.setImage( self._catchCurrentViewContent() )
         except:
             try:

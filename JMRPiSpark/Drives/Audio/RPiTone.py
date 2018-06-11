@@ -100,7 +100,7 @@ TONE_TREBLE = [
   [786,882,990,1049,1178,1322,1484]
 ]
 
-class JMRPiTonePlayer:
+class RPiTonePlayer:
     TONE_DUTY = 50
     MUTE_TONE = 0
 
