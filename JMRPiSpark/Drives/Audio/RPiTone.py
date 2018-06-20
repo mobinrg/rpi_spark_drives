@@ -25,12 +25,13 @@
 # #########################################################
 #
 #    RPi Spark Tone
-#    by Kunpeng Zhang
+#    @author Kunpeng Zhang
 #    v1.0.0    2018.5.29
 #
 
 import RPi.GPIO as GPIO
 from time import sleep
+from time import time
 
 TONE_A = 0
 TONE_B = 1
@@ -101,14 +102,29 @@ TONE_TREBLE = [
 ]
 
 class RPiTonePlayer:
+    """!
+    \~english Use PWM to play tones
+    \~chinese 使用PWM播放音符
+    """
     TONE_DUTY = 50
     MUTE_TONE = 0
 
     _pinPWM = None
     _pwmPlayer = None
 
-    def __init__(self, pinPwm = None):
-        self._pinPWM = pinPwm
+    def __init__(self, pinPWM = None):
+        """!
+        \~english
+        Initialize the RPiTonePlayer object instance.
+        @param pinPWM This is a GPIO number of PWM for output
+        @note on Raspberry Pi pwm output io you can choose in (BCM Mode): 12, 13, 18
+
+        \~chinese
+        初始化 RPiTonePlayer 对象实例
+        @param pinPWM: 用于输出的 PWM 的 GPIO IO 编号
+        @note 树莓派 pwm 输出可以选择（BCM模式）：12,13,18
+        """
+        self._pinPWM = pinPWM
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self._pinPWM, GPIO.OUT)
@@ -118,14 +134,38 @@ class RPiTonePlayer:
         self._pwmPlayer.start(self.TONE_DUTY)
         self._pwmPlayer.stop()
 
+    def _delay(self, delay = 0):
+        startTime=time()
+        while True: 
+            if (time() - startTime) > delay: break
+
     def stopTone(self):
+        """!
+        \~english Stop tone play
+        \~chinese Stop tone play
+        """
         if self._pwmPlayer == None: return False
         self._pwmPlayer.stop()
 
     def playTone(self, freq, reps = 1, delay = 0.1, muteDelay = 0.0):
+        """!
+        \~english Play a tone
+        \~chinese 播放音符
+        \~english 
+        @param freq
+        @param reps
+        @param delay >= 0(s) if 0 mean is do not delay. tone play will be Stop immediately <br>
+        @param muteDelay >= 0(s) If 0 means no pause after playing, play the next note immediately
+        \~chinese 
+        @param freq: 频率
+        @param reps: 重复次数
+        @param delay >= 0(s) 如果是 0 意味着不延迟。 音符会立即停止播放 <br>
+        @param muteDelay >= 0(s) 如果是 0 表示音符播放结束后没有停顿，立刻播放下一个音符
+        """
         if freq == 0: 
             self.stopTone()
-            sleep(delay)
+            self._delay(delay)
+            #sleep(delay)
             return False
 
         if self._pwmPlayer == None: self._initPWMPlayer(freq)
@@ -133,23 +173,43 @@ class RPiTonePlayer:
         for r in range(0,reps):
             self._pwmPlayer.start(self.TONE_DUTY)
             self._pwmPlayer.ChangeFrequency( freq )
-            sleep(delay)
+            self._delay(delay)
+            #sleep(delay)
 
             if muteDelay>0:
                 self.stopTone()
-                sleep(muteDelay)
+                self._delay(muteDelay)
+                #sleep(muteDelay)
 
         return True
 
-    #############################################3
-    # Play tone from a list
-    # Item str of list:
-    #    freq
-    #    reps
-    #    delay    >= 0(ms)    if 0 mean is do not delay. tone play will be Stop immediately 
-    #    muteDelay >=0(ms)    if 0 mean is do not stop tone play.
-    #
     def playToneList(self, playList = None):
+        """!
+        \~english
+        Play tone from a tone list
+        @param playList a array of tones
+        
+        \~chinese
+        播放音调列表
+        @param playList: 音调数组
+        
+        \~english @note <b>playList</b> format:\n
+        \~chinese @note <b>playList</b> 格式:\n
+        \~
+            <pre>
+            [
+              {"freq": 440, "reps": 1, "delay": 0.08, "muteDelay": 0.15},
+              {"freq": 567, "reps": 3, "delay": 0.08, "muteDelay": 0.15},
+              ...
+            ]
+           </pre>\n
+        \~english
+        \e delay: >= 0(s) if 0 mean is do not delay. tone play will be Stop immediately <br>
+        \e muteDelay: 0.15 >= 0(s) If 0 means no pause after playing, play the next note immediately
+        \~chinese
+        \e delay: >= 0（s）如果是 0 意味着不延迟。 音调会立即停止播放 <br>
+        \e muteDelay: >= 0（s）如果是 0 表示播放音符结束后没有停顿，立刻播放下一个音符
+        """
         if playList == None: return False
         for t in playList:
             self.playTone(t["freq"], t["reps"], t["delay"], t["muteDelay"])

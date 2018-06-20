@@ -25,7 +25,7 @@
 # #########################################################
 #
 #    RPi OLED display ssd1306
-#    by Kunpeng Zhang
+#    @author Kunpeng Zhang
 #    v1.0.0    2018.3.20
 #
 
@@ -35,6 +35,10 @@ from PIL import Image
 from .RPiDisplay import RPiDiaplay
 
 class SSD1306Base( RPiDiaplay ):
+    """!
+    \~english SSD1306 Display Chip
+    \~chinese SSD1306 显示芯片驱动
+    """
     CMD_SSD1306_SET_MEM_ADDR_MODE       = 0x20
     CMD_SSD1306_SET_COLUMN_ADDR         = 0x21
     CMD_SSD1306_SET_PAGE_ADDR           = 0x22
@@ -95,27 +99,57 @@ class SSD1306Base( RPiDiaplay ):
     # scrolling can be set smaller or equal to the MUX ratio.
     CMD_SSD1306_SET_SCROLL_VERTICAL_AREA= 0xA3
     
-    #mirror horizontal
-    _mirror_h = 0
-    #mirror vertical
-    _mirror_v = 0
-    
-    _mem_pages = 0
+    ## 
+    # \~english mirror horizontal (boolean)
+    # \~chinese 水平镜像 (boolean)
+    _mirror_h = None
+    ## 
+    # \~english mirror vertical (boolean)
+    # \~chinese 垂直镜像 (boolean)
+    _mirror_v = None
+    ## 
+    # \~english buffer page (int)
+    # \~chinese 显存分页 (int)
+    _mem_pages = None
 
     def _command(self, commands):
-        """Send command to ssd1306, DC pin need set to LOW """
+        """!
+        \~english
+        Send command to ssd1306, DC pin need set to LOW
+        @param commands: an byte or array of bytes
+
+        \~chinese 
+        发送命令给 SSD1306，DC 需要设定为低电平 LOW
+        @param commands: 一个字节或字节数组
+        """
         if self._spi == None: raise "Do not setting SPI"
         GPIO.output( self._spi_dc, 0 )
         self._spi.writebytes( commands )
 
     def _data(self, data):
-        """Send data to ssd1306, DC pin need set to HIGH """
+        """!
+        \~english
+        Send data to ssd1306, DC pin need set to HIGH
+        @param data: sent to display chip of data. it can be an byte or array of bytes
+
+        \~chinese
+        发送数据给 SSD1306, DC 需要设定为高电平 HIGH
+        @param data: 送到显示芯片的数据。 可以是一个字节或字节数组
+        """
         if self._spi == None: raise "Do not setting SPI"
         GPIO.output( self._spi_dc, 1 )
         self._spi.writebytes( data )
 
     def _display_buffer(self, buffer ):
-        """Send buffer data to physical display."""
+        """!
+        \~english
+        Send buffer data to physical display.
+        @param buffer: sent to display chip of data.
+
+        \~chinese
+        将缓冲区数据发送到物理显示。
+        @param buffer: 送到显示芯片的数据。
+        """
         self._command([
             self.CMD_SSD1306_SET_COLUMN_ADDR,
             0, self.width-1,
@@ -125,6 +159,13 @@ class SSD1306Base( RPiDiaplay ):
         self._data( buffer )
 
     def _init_display(self):
+        """!
+        \~english
+        Initialize the SSD1306 display chip
+
+        \~chinese
+        初始化SSD1306显示芯片
+        """
         self._command([
             # 0xAE
             self.CMD_SSD1306_DISPLAY_OFF,
@@ -171,21 +212,53 @@ class SSD1306Base( RPiDiaplay ):
         ])
 
     def init(self):
+        """!
+        \~english
+        Initialize the SSD1306 display chip, and ready for show samething
+        \~chinese
+        初始化SSD1306显示芯片，并准备好接收显示命令和数据
+        """
         self._init_io()
         self.reset()
         self._init_display()
 
     def clear(self, fill = 0x00):
+        """!
+        \~english
+        Clear buffer data and fill color into buffer
+        @param fill: a color value, it will fill into buffer.<br>
+                The SSD1306 only choose two colors: <br>
+                   0 (0x0): black <br>
+                   1 (0x1): white <br>
+
+        \~chinese
+        清除缓冲区数据并在缓冲区中填充颜色
+        @param fill: 一个颜色值，它会填充到缓冲区中 <br>
+                     SSD1306只能选择两种颜色： <br>
+                        0（0x0）：黑色 <br>
+                        1（0x1）：白色 <br>
+        """
         self._buffer = [ fill ] * ( self.width * self._mem_pages )
 
     def on(self):
+        """!
+        \~english power on display.
+        \~chinese 开启显示屏
+        """
         self._command( [self.CMD_SSD1306_DISPLAY_ON] )
 
     def off(self):
+        """!
+        \~english power off display.
+        \~chinese 关闭显示屏
+        """
         self._command( [self.CMD_SSD1306_DISPLAY_OFF] )
 
     def reset(self):
-        """Reset display"""
+        """!
+        \~english Reset display
+        \~chinese 复位显示屏
+        """
         if self._spi_reset == None: return
         GPIO.output( self._spi_reset, 1 )
         time.sleep(0.002)
@@ -194,24 +267,58 @@ class SSD1306Base( RPiDiaplay ):
         GPIO.output( self._spi_reset, 1 )
 
     def setContrast(self, contrast):
-        self._command([self.CMD_SSD1306_SET_CONTRAST])
-        self._command([contrast])
-
-#         self._command([self.CMD_SSD1306_SET_CONTRAST, contrast])
+        """!
+        \~english 
+        Change contrast of SSD1306 display chip
+        @param contrast: a contrast value, the range is: 0-255
+        
+        \~chinese 
+        改变 SSD1306 显示屏对比度
+        @param contrast: 对比度值，范围是：0-255
+        """
+        self._command([self.CMD_SSD1306_SET_CONTRAST, contrast])
         
     def setBrightness(self, brightness):
-        raise ValueError("Has not brightness controller") 
+        """!
+        \~english 
+        @deprecated SSD1306 do not supported brightness justment
+        \~chinese 
+        @deprecated SSD1306不支持亮度调整
+        """
+        raise ValueError("Has not brightness controller")
 
     def display(self, buffer = None):
-        """Write buffer to physical display."""
+        """!
+        \~english 
+        Write buffer to physical display.
+        @param buffer: Data to display，If <b>None</b> mean will use self._buffer data to display
+        \~chinese 
+        将缓冲区写入物理显示屏。
+        @param buffer: 要显示的数据，如果是 <b>None</b>(默认) 将把 self._buffer 数据写入物理显示屏 
+        """
         if buffer != None:
             self._display_buffer( buffer )
         else:
             self._display_buffer( self._buffer )
             
     def setImage(self, image):
-        """Convert image to the buffer, The image mode must be 1 and image size 
+        """!
+        \~english
+        Convert image to the buffer, The image mode must be 1 and image size 
         equal to the display size image type is Python Imaging Library image.
+        @param image: a PIL image object
+
+        \~chinese
+        将图像转换为缓冲区，这个图像的色彩模式必须为 1 同时图像大小必须等于显存大小，
+        图像类型： PIL Image (Python Imaging Library)
+        @param image: PIL图像对象
+
+        \n \~
+        @note
+        <pre>
+        ssd1306.setImage( aPILImage )
+        ssd1306.display()
+        </pre>
         """
         if image.mode != '1':
             raise ValueError('The image color must be in mode \"1\".')
@@ -235,20 +342,47 @@ class SSD1306Base( RPiDiaplay ):
                 bi += 1
 
     def scrollOn(self):
+        """!
+        \~english 
+        Start scroll screen
+        use: SSD1306Base#scrollWith to set up scroll mode
+        \~chinese 
+        开始滚屏
+        使用：SSD1306Base#scrollWith 设置滚动模式
+        """
         self._command([self.CMD_SSD1306_SET_SCROLL_ACTIVE])
         
     def scrollOff(self):
+        """!
+        \~english Stop scroll screen
+        \~chinese 停止滚屏
+        
+        \n \~
+        @see scrollOn
+        """
         self._command([self.CMD_SSD1306_SET_SCROLL_DEACTIVE])
 
     def scrollWith(self, hStart = 0x00, hEnd=0x00, vOffset = 0x00, vStart=0x00, vEnd=0x00, int = 0x00, dire = "left" ):
-        """Scroll screen
-            hStart:  Set horizontal scroll PAGE start address, value can be chose between 0 and 7
-            hEnd:  Set horizontal scroll PAGE end address, value can be chose between 0 and 7
-            vOffset: Vertical scroll offset row, if set to 0x00(0) mean is off vertical scroll
-            vStart: Vertical scroll start line, value can be chose between 0x00 and screen.height
-            vEnd: Vertical scroll end line, value can be chose between 0x00 and screen.height
-            int: Set time interval between each scroll step
-            dire: Set scroll direction, value can be "left" or "right"
+        """!
+        \~english 
+        Scroll screen
+        @param hStart: Set horizontal scroll PAGE start address, value can be chose between 0 and 7
+        @param hEnd:  Set horizontal scroll PAGE end address, value can be chose between 0 and 7
+        @param vOffset: Vertical scroll offset row, if set to 0x00(0) mean is off vertical scroll
+        @param vStart: Vertical scroll start line, value can be chose between 0x00 and screen.height
+        @param vEnd: Vertical scroll end line, value can be chose between 0x00 and screen.height
+        @param int: Set time interval between each scroll step
+        @param dire: Set scroll direction, value can be "left" or "right"
+        
+        \~chinese
+        屏幕滚动
+        @param hStart: 设置水平滚动PAGE起始地址，数值可以在0到7之间选择
+        @param hEnd:  设置水平滚动PAGE结束地址，值可以在0和7之间选择
+        @param vOffset: 垂直滚动偏移行，如果设置为0x00（0），表示关闭垂直滚动
+        @param vStart: 垂直滚动起始行，值可以在0x00和screen.height之间选择
+        @param vEnd: 垂直滚动结束行，值可以在0x00和screen.height之间选择
+        @param int: 设置每个滚动步骤之间的时间间隔
+        @param dire: 设置滚动方向，数值可以是 "left" 或 "right"
         """
         self._command( [self.CMD_SSD1306_SET_SCROLL_DEACTIVE] )
         if vOffset != 0:
@@ -272,7 +406,75 @@ class SSD1306Base( RPiDiaplay ):
 
 
 class SSD1306_128x64(SSD1306Base):
-    def __init__( self, spi=None, spiMosi= None, spiDC=None, spiCS=None, spiReset=None, spiClk=None, mirrorH = 0, mirrorV = 0  ):        
+    """!
+    \~english 
+    128x64 OLED of SSD1306 Display Chip
+    uses: SPI
+
+    \~chinese
+    SSD1306 128x64 OLED 显示芯片驱动, 使用 SPI 总线
+    """
+    def __init__( self, spi=None, spiMosi= None, spiDC=None, spiCS=None, spiReset=None, spiClk=None, mirrorH = 0, mirrorV = 0  ):
+        """!
+        \~english Initialize the SSD1306 128x64 OLED display object instance and config GPIO and others
+        \~chinese 实例化 SSD1306 128x64 OLED 显示屏对象，同时初始化 GPIO 和其他
+
+        \~english
+        @param spi: a spi bus object instance
+        @param spiMosi: spi mosi io number, eg. 10 default is None
+        @param spiDC: spi dc io number, eg. 9 default is None
+        @param spiCS: spi cs io number, eg. 8 default is None
+        @param spiReset: spi reset io number, eg. 18 default is None. <br>
+                        If <b>None</b> mean this chip do not need reset
+        @param spiClk: spi clk io number, eg. 11 default is None
+        @param mirrorH: The displayed image flips horizontal
+        @param mirrorV: The displayed image flips vertically
+        
+        \~chinese
+        @param spi: SPI 总线对象实例
+        @param spiMosi: SPI MOSI IO, 例如： 10, 默认: None
+        @param spiDC: SPI DC IO, 例如： 9, 默认: None
+        @param spiCS: SPI CS IO, 例如： 8, 默认: None
+        @param spiReset: SPI RESET IO, 例如： 18, 默认: None <br>
+                        如果是 <b>None</b> 停用 SPI RESET 功能
+        @param spiClk: SPI CLK IO, 例如：11， 默认 None
+        @param mirrorH: 显示屏水平镜向显示
+        @param mirrorV: 显示屏垂直镜向显示
+
+        \~
+        @note
+        \~english A siample for use SSD1306_128x64 below:
+        \~chinese 使用 SSD1306_128x64 示例：
+        \~\n
+        <hr>
+        <pre>
+        import spidev
+        from PIL import Image
+        from JMRPiSpark.Drives.Display.SSD1306 import SSD1306_128x64 \n
+        class CONFIG_DSP:
+            DSP_RESET       = None
+            DSP_DC          = 9
+            DSP_SPI_PORT    = 0
+            DSP_SPI_DEVICE  = 0
+            DSP_SPI_MAX_SPEED_HZ = 2000000
+            DSP_MIRROR_H    = True
+            DSP_MIRROR_V    = True \n
+        spi = spidev.SpiDev()
+        spi.open( CONFIG_DSP.DSP_SPI_PORT, CONFIG_DSP.DSP_SPI_DEVICE)
+        spi.max_speed_hz = CONFIG_DSP.DSP_SPI_MAX_SPEED_HZ
+        spi.cshigh = False
+        spi.mode = 0 \n
+        myDSP = SSD1306_128x64 ( 
+            spi,  
+            spiDC = CONFIG_DSP.DSP_DC,
+            spiReset = CONFIG_DSP.DSP_RESET,
+            mirrorH = CONFIG_DSP.DSP_MIRROR_H, 
+            mirrorV = CONFIG_DSP.DSP_MIRROR_V
+            ) \n
+        myDSP.init()
+        myDSP.on()
+        </pre>
+        """
         self._init_config(128, 64, spi, spiMosi, spiDC, spiCS, spiReset, spiClk)
         self._mirror_h = mirrorH
         self._mirror_v = mirrorV

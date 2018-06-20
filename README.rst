@@ -51,6 +51,11 @@ History:
 * v1.0	2018.6	first released
 
 
+SDK Manual:
+
+* http://doc.mobinrg.com/rpi_spark/sdk/en/
+
+
 Drive Example:
 
 * http://github.com/PowerRocker/rpi_spark_examples
@@ -118,6 +123,12 @@ MIT license, all text above must be included in any redistribution
 * v1.0	2018.6	第一次发布
 
 
+SDK 参考:
+
+* http://doc.mobinrg.com/rpi_spark/sdk/en/
+* http://doc.mobinrg.com/rpi_spark/sdk/zh_CN/
+
+
 驱动示例代码:
 
 * http://github.com/PowerRocker/rpi_spark_examples
@@ -183,6 +194,12 @@ MIT许可证，上述所有文本必须包含在任何重新发布中
 
 * Linux
 * Python 2.7 or Python 3.x
+
+
+SDK 参考:
+
+* http://doc.mobinrg.com/rpi_spark/sdk/en/
+* http://doc.mobinrg.com/rpi_spark/sdk/zh_CN/
 
 
 驅動示例源碼:

@@ -30,29 +30,54 @@
 #
 #    Using SSD1306 chip-driven OLED display
 #    使用 SSD1306 芯片驱动的 OLED 显示屏
-#
 
 from .SSPILScreen import SSPILScreen
 
 class SScreenSSD1306( SSPILScreen ):
-    """This class work with PIL Lib.
-    """
+    """!
+    \~english
+    Using SSD1306 chip to implement the SScreen object
+    Supported: JMRPiDisplay SSD1306 driver and Adafruit SSD1306 driver
 
+    \~chinese
+    使用 SSD1306 显示芯片实现的 SScreen 对象
+    支持: JMRPiDisplay_SSD1306 和 Adafruit SSD1306 driver
+    """
     def __init__(self, display, bufferColorMode, bufferSize=None, displayDirection=0 ):
+        """!
+        \~english
+        Initialize the SScreenSSD1306 object instance
+        @param display: a display hardware instance, eg. SSD1306
+        @param bufferColorMode: color mode, can be choose: SS_COLOR_MODE_MONO ("1") or SS_COLOR_MODE_RGB ("RGB")
+        @param bufferSize: size of buffer, eg. (128,64) or (320, 240) ...
+        @param displayDirection: direction of display, can be: 0, 90, 180, 270
+        
+        \~chinese
+        初始化 SScreenSSD1306 对象实例
+        @param display: 显示屏硬件对象实例，例如： SSD1306
+        @param bufferColorMode: 缓存色彩模式，取值： SS_COLOR_MODE_MONO ("1") 或 SS_COLOR_MODE_RGB ("RGB")
+        @param bufferSize: 缓存大小，例如： (128,64) or (320, 240) ...
+        @param displayDirection: 显示屏方向，取值：0, 90, 180, 270
+        """
         self._checkBufferColorMode(bufferColorMode)
         # Initialize display.
 #         display.begin()
-        self._screen_color_mode = "1"
+        self._display_color_mode = "1"
         self._initDisplay(display, displayDirection, (display.width, display.height))
 
         # Initialize buffer and canvas
         self._initBuffer( bufferColorMode, bufferSize )
-        pass
 
     def refresh(self):
-        """Update current view content to display
-        """
+        """!
+        \~english
+        Update current view content to display
+        Supported: JMRPiDisplay_SSD1306 and Adafruit SSD1306 driver
 
+        \~chinese
+        更新当前视图内容到显示屏
+        支持: JMRPiDisplay_SSD1306 和 Adafruit SSD1306 driver
+        """
         try:
             # suport for RPiDisplay SSD1306 driver
             self.Display.setImage( self._catchCurrentViewContent() )
@@ -64,13 +89,3 @@ class SScreenSSD1306( SSPILScreen ):
                 raise "Can not update image to buffer."
 
         self.Display.display()
-        pass
-
-    def clear(self):
-        """Clear display and screen's canvas
-        """
-        self.clearCanvas()
-        self.Display.clear()
-        pass
-
-    pass

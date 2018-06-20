@@ -26,35 +26,61 @@
 #
 # RPi Spark Audio Device
 #
-# Author: Kunpeng Zhang
+# @author: Kunpeng Zhang
 # 2018.4.15
 #
 
 import subprocess as sub
-PIN_MODE_AUDIO = "alt0"
-PIN_MODE_OUTPUT = "output"
 
 class RPiAudioDevice:
+    PIN_MODE_AUDIO = "alt0"
+    PIN_MODE_OUTPUT = "output"
+
+    ##
+    # Audio right channel IO
     channelR = None
+    ##
+    # Audio left channel IO
     channelL = None
     
     def __init__(self, pinRight, pinLeft):
+        """!
+        \~english
+        Initialize the RPiAudioDevice object instance.
+        @param pinRight: Audio right channel IO. "None" means channel disabled
+        @param pinLeft: Audio left channel IO. "None" means channel disabled
+        @note On Raspberry Pi the audio channel IO can be choose in ( GPIO in BCM MODE ): 12, 13, 18
+        
+        \~chinese
+        初始化 RPiAudioDevice 对象实例。
+        @param pinRight: 音频右声道 IO 。 "None" 表示通道禁用
+        @param pinLeft: 音频左声道 IO 。 "None" 表示通道禁用
+        @note 树梅派(Raspberry Pi)可选择音频通道输出 IO（BCM 模式）：12,13,18            
+        """
         self.channelR = pinRight
         self.channelL = pinLeft
-
-    # Open Audio output. set pin mode to ALT0
+ 
     def on(self):
+        """!
+        \~english
+        Open Audio output. set pin mode to ALT0
+        @return a boolean value. if True means open audio output is OK otherwise failed to open.
+
+        \~chinese
+        打开音频输出。 将引脚模式设置为ALT0
+        @return 布尔值。 如果 True 表示打开音频输出成功，否则不成功。
+        """
         isOK = True
         try:
             if self.channelR!=None:
-                sub.call(["gpio", "-g", "mode", "{}".format(self.channelR), PIN_MODE_AUDIO ])
+                sub.call(["gpio", "-g", "mode", "{}".format(self.channelR), self.PIN_MODE_AUDIO ])
         except:
             isOK = False
             print("Open audio right channel failed.")
 
         try:
             if self.channelL!=None:
-                sub.call(["gpio","-g","mode", "{}".format(self.channelL), PIN_MODE_AUDIO ])
+                sub.call(["gpio","-g","mode", "{}".format(self.channelL), self.PIN_MODE_AUDIO ])
         except:
             isOK = False
             print("Open audio left channel failed.")
@@ -63,17 +89,26 @@ class RPiAudioDevice:
     
     # Close Audio output. set pin mode to OUTPUT
     def off(self):
+        """!
+        \~english
+        Close Audio output. set pin mode to output
+        @return a boolean value. if True means close audio output is OK otherwise failed to close.
+
+        \~chinese
+        关闭音频输出。 将引脚模式设置为输出
+        @return 布尔值。 如果为 True 关闭音频输出成功，否则关闭不成功。
+        """
         isOK = True
         try:
             if self.channelR!=None:
-                sub.call(["gpio","-g","mode", "{}".format(self.channelR), PIN_MODE_OUTPUT ])
+                sub.call(["gpio","-g","mode", "{}".format(self.channelR), self.PIN_MODE_OUTPUT ])
         except:
             isOK = False
             print("Close audio right channel failed.")
 
         try:
             if self.channelL!=None:
-                sub.call(["gpio","-g","mode", "{}".format(self.channelL), PIN_MODE_OUTPUT ])
+                sub.call(["gpio","-g","mode", "{}".format(self.channelL), self.PIN_MODE_OUTPUT ])
         except:
             isOK = False
             print("Close audio left channel failed.")

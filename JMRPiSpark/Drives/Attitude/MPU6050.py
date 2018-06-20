@@ -26,18 +26,48 @@
 #
 # MPU6050
 #
-# Author: Kunpeng Zhang
-# v1.0.0    2018.04.01
+# @author: Kunpeng Zhang
+# @version v1.0.0
+# @date 2018.04.01
 #
 
 import smbus
 
+##
+# default I2C address of MPU6050
 DEF_MPU6050_ADDRESS = 0x68
 
+##
 # Earth Gravitiy
 GRAVITIY_EARTH  = 9.80665
 
 class MPU6050:
+    """!
+    \~english
+    This driver is for MPU-6050 Motion Processing Unit( InvenSense Inc ).
+
+    Features: <br>
+        * Gyroscope sensor
+        * Accelerometer sensor
+        * Temperature sensor
+        * Sensor data ready Interrupt
+        * Motion detection Interrupt
+        * Sleep mode
+        * More...
+
+    \~chinese
+    此驱动程序适用于MPU-6050运动处理单元 ( InvenSense Inc )。
+
+         特点：<br>
+             * 陀螺仪
+             * 加速度计
+             * 温度传感器
+             * 传感器数据就绪中断
+             * 移动侦测中断
+             * 睡眠模式
+             * 更多...
+    """
+
     # Scale Modifiers
     ACCEL_SCALE_MODIFIER_2G = 16384.0
     ACCEL_SCALE_MODIFIER_4G = 8192.0
@@ -46,8 +76,8 @@ class MPU6050:
 
     GYRO_SCALE_MODIFIER_250DEG = 131.0
     GYRO_SCALE_MODIFIER_500DEG = 65.5
-    GYRO_SCALE_MODIFIER_1000DEG = 32.8
-    GYRO_SCALE_MODIFIER_2000DEG = 16.4
+    GYRO_SCALE_MODIFIER_1KDEG = 32.8
+    GYRO_SCALE_MODIFIER_2KDEG = 16.4
 
     # Pre-defined ranges
     ACCEL_RANGE_2G = 0x00
@@ -57,8 +87,8 @@ class MPU6050:
 
     GYRO_RANGE_250DEG = 0x00
     GYRO_RANGE_500DEG = 0x08
-    GYRO_RANGE_1000DEG = 0x10
-    GYRO_RANGE_2000DEG = 0x18
+    GYRO_RANGE_1KDEG  = 0x10
+    GYRO_RANGE_2KDEG  = 0x18
 
     # MPU-6050 Registers
     REG_PWR_MGMT_1 = 0x6B
@@ -136,56 +166,82 @@ class MPU6050:
 
     _address = None
     _bus = None
-    _gravityFactor = 0;
+    _gravityFactor = None;
 
     def __init__(self, address, busId = 1, gravityFactor = GRAVITIY_EARTH ):
+        """!
+        \~english
+        Initialize the MPU6050 object instance
+
+        @param address        MPU6050 I2C Address (default is: 0x68)
+        @param busId          I2C Bus ID of Raspberry Pi. RPi Spark Shield default is 1
+        @param gravityFactor  Default is GRAVITIY_EARTH
+        
+        \~chinese
+        初始化 MPU6050 实例
+
+        @param address        MPU6050 I2C 地址（默认为：0x68）
+        @param busId          树梅派( Raspberry Pi ) I2C 总线 ID。 RPi Spark Shield 默认值为 1
+        @param gravityFactor  默认 GRAVITIY_EARTH ( 地球重力加速度 )
+
+        \~ \n
+        @see DEF_MPU6050_ADDRESS
+        @see GRAVITIY_EARTH
+        """
         self._address = address
         self._bus = smbus.SMBus( busId )
         self._gravityFactor = gravityFactor
         self.setAccelRange( self.ACCEL_RANGE_2G )
 
-    def readByte(self, regAddr):
+    def _readByte(self, regAddr):
         return self._bus.read_byte_data(self._address, regAddr)
 
-    def readWord(self, regAddr):
-        high = self.readByte(regAddr)
-        low = self.readByte(regAddr+1)
+    def _readWord(self, regAddr):
+        high = self._readByte(regAddr)
+        low = self._readByte(regAddr+1)
         rawVal = ( high << 8 ) | low;
         if (rawVal >= 0x8000):
             return -((65535 - rawVal) + 1)
         else:
             return rawVal
 
-    def writeByte(self, regAddr, regValue):
+    def _writeByte(self, regAddr, regValue):
         self._bus.write_byte_data(self._address, regAddr, regValue)
 
-    def sendCmd(self, cmd, value, firstClear = True):
+    def _sendCmd(self, cmd, value, firstClear = True):
         if firstClear:
-            self.writeByte(cmd, 0x00)
-        self.writeByte(cmd, value)
+            self._writeByte(cmd, 0x00)
+        self._writeByte(cmd, value)
 
     def reset(self):
-        """Reset MPU all registers
+        """!
+        \~english Reset MPU all registers
+        \~chinese 复位全部寄存器
         """
-        self.writeByte(self.REG_PWR_MGMT_1, self.VAL_PWR_MGMT_1_RESET)
-
+        self._writeByte(self.REG_PWR_MGMT_1, self.VAL_PWR_MGMT_1_RESET)
+ 
     def open(self):
-        """Trun on device and with all sensors at same time
+        """!
+        \~english Trun on device and with all sensors at same time
+        \~chinese 开启全部传感器
         """
-        self.sendCmd(self.REG_PWR_MGMT_1, 0x00)
-        self.sendCmd(self.REG_PWR_MGMT_2, 0x00)
+        self._sendCmd(self.REG_PWR_MGMT_1, 0x00)
+        self._sendCmd(self.REG_PWR_MGMT_2, 0x00)
 
     def openWith(self, accel = True, gyro = True, temp = True, cycle = False, cycleFreq = 0x00):
-        """Trun on device and configurable sensor and wake up mode at same time
-        accel: True - enable accelerometer, 
-        gyro : True - enable gyroscope, 
-        temp: True - enable Thermometer, 
-        cycle : True - cycle wake-up mode, 
-        cycleFreq : cycle wake-up frequency, this value can be choise: 
-            VAL_PWR_MGMT_2_LP_WAKE_CTRL_1_25HZ is default
-            VAL_PWR_MGMT_2_LP_WAKE_CTRL_5HZ
-            VAL_PWR_MGMT_2_LP_WAKE_CTRL_20HZ
-            VAL_PWR_MGMT_2_LP_WAKE_CTRL_40HZ
+        """!
+        Trun on device and configurable sensor and wake up mode at same time
+        
+        @param accel: True - Enable accelerometer
+        @param gyro: True - Enable gyroscope
+        @param temp: True - Enable Thermometer
+        @param cycle: True - Enable cycle wake-up mode
+        @param cycleFreq: Cycle wake-up frequency, this value can be choise:
+
+          @see VAL_PWR_MGMT_2_LP_WAKE_CTRL_1_25HZ is default
+          @see VAL_PWR_MGMT_2_LP_WAKE_CTRL_5HZ
+          @see VAL_PWR_MGMT_2_LP_WAKE_CTRL_20HZ
+          @see VAL_PWR_MGMT_2_LP_WAKE_CTRL_40HZ
         """
         val_pwr_2 = 0x00
         #disable Accel sensor
@@ -210,43 +266,55 @@ class MPU6050:
             val_pwr_1 = val_pwr_1 | self.VAL_PWR_MGMT_1_ON_CYCLE
             val_pwr_2 = val_pwr_2 | cycleFreq
 
-        self.sendCmd( self.REG_PWR_MGMT_2, val_pwr_2 )
-        self.sendCmd( self.REG_PWR_MGMT_1, val_pwr_1 )
+        self._sendCmd( self.REG_PWR_MGMT_2, val_pwr_2 )
+        self._sendCmd( self.REG_PWR_MGMT_1, val_pwr_1 )
 
     def openOnlyAccel(self, cycleFreq = 0x00 ):
-        """Trun on device into Accelerometer Only Low Power Mode
-        the [cycleFreq] value can be choise: 
-            VAL_PWR_MGMT_2_LP_WAKE_CTRL_1_25HZ is default
-            VAL_PWR_MGMT_2_LP_WAKE_CTRL_5HZ
-            VAL_PWR_MGMT_2_LP_WAKE_CTRL_20HZ
-            VAL_PWR_MGMT_2_LP_WAKE_CTRL_40HZ
+        """!
+        Trun on device into Accelerometer Only Low Power Mode
+        @param cycleFreq can be choise: 
+            @see VAL_PWR_MGMT_2_LP_WAKE_CTRL_1_25HZ is default
+            @see VAL_PWR_MGMT_2_LP_WAKE_CTRL_5HZ
+            @see VAL_PWR_MGMT_2_LP_WAKE_CTRL_20HZ
+            @see VAL_PWR_MGMT_2_LP_WAKE_CTRL_40HZ
         """
         self.openWith(accel = True, gyro = False, temp = False, cycle = True, cycleFreq = cycleFreq)
 
     def sleep(self):
-        """Set device into sleep mode
+        """!
+            \~english Set device into sleep mode
+            \~chinese MPU6050 进入睡眠模式，低功耗
         """
-        self.sendCmd(self.REG_PWR_MGMT_1, self.VAL_PWR_MGMT_1_SLEEP)
+        self._sendCmd(self.REG_PWR_MGMT_1, self.VAL_PWR_MGMT_1_SLEEP)
 
-    def setMotionInt(self, mot_dhpf = 0x01, mot_thr = 0x14, mot_dur = 0x30, mot_dete_dec = 0x15 ):
-        """Set to enable Motion Detection Interrupt
+    def setMotionInt(self, motDHPF = 0x01, motTHR = 0x14, motDUR = 0x30, motDeteDec = 0x15 ):
+        """!
+        Set to enable Motion Detection Interrupt
 
-            mot_dhpf        : set the Digital High Pass Filter. default is 0x01 - 5Hz
-            mot_thr         : desired motion threshold. for example 20 (0x14), is default value
-            mot_dur         : desired motion duration. for example 48ms (0x30), is default value
-            mot_dete_dec    : motion detection decrement. for example 21 (0x15), is defaule value
+        @param motDHPF Set the Digital High Pass Filter. Default is 0x01 (5Hz)
+        @param motTHR  Desired motion threshold. Default is 20 (0x14)
+        @param motDUR  Desired motion duration. Default is 48ms (0x30)
+        @param motDeteDec Motion detection decrement. Default is 21 (0x15)
+        
+        @note <b>motDHPF</b> should be one of the following values:<br>
+            0x00: RESET,<br>
+            0x01: 5Hz,<br>
+            0x02: 2.5Hz,<br>
+            0x03: 1.25Hz,<br>
+            0x04: 0.63Hz,<br>
+            0x07: HOLD<br>
         """
         #After power on (0x00 to register (decimal) 107), the Motion Detection Interrupt can be enabled as follows:
-        #self.sendCmd( self.REG_PWR_MGMT_1, 0x00 )
+        #self._sendCmd( self.REG_PWR_MGMT_1, 0x00 )
         #(optionally?) Reset all internal signal paths in the MPU-6050 by writing 0x07 to register 0x68;
-        self.sendCmd( self.REG_SIGNAL_PATH_RESET, 0x07 )
+        self._sendCmd( self.REG_SIGNAL_PATH_RESET, 0x07 )
         #write register 0x37 to select how to use the interrupt pin. 
         #For an active high, push-pull signal that stays until register 
         #(decimal) 58 is read, write 0x20 (need read to clear INT state) or 0x00 (auto clear INT state).
-        self.sendCmd( self.REG_INT_PIN_CFG, 0x00 )
+        self._sendCmd( self.REG_INT_PIN_CFG, 0x00 )
         
-        orgAccelConf = self.readByte(self.REG_ACCEL_CONFIG)
-        newAccelConf = ( (orgAccelConf | 0xE7) ^ 0xE7 ) | mot_dhpf
+        orgAccelConf = self._readByte(self.REG_ACCEL_CONFIG)
+        newAccelConf = ( (orgAccelConf | 0xE7) ^ 0xE7 ) | motDHPF
         # Write register 28 (==0x1C) to set the Digital High Pass Filter, 
         # bits 3:0. For example set it to 0x01 for 5Hz. 
         # (These 3 bits are grey in the data sheet, but they are used! 
@@ -257,50 +325,70 @@ class MPU6050:
         # 0x02: 2.5Hz,
         # 0x03: 1.25Hz,
         # 0x04: 0.63Hz,
-        # 0x07:hold
+        # 0x07: hold
         #
         # 高通滤波器灵敏度调节
         #
-        self.sendCmd( self.REG_ACCEL_CONFIG, newAccelConf )
+        self._sendCmd( self.REG_ACCEL_CONFIG, newAccelConf )
         #Write the desired Motion threshold to register 0x1F (For example, write decimal 20).
-        self.sendCmd( self.REG_MOTION_DET, mot_thr )
+        self._sendCmd( self.REG_MOTION_DET, motTHR )
         #To register 0x20 (hex), write the desired motion duration, for example 40ms (0x28).
         # 灵敏度调节
-        self.sendCmd( self.REG_MOTION_DET_DUR, mot_dur )
+        self._sendCmd( self.REG_MOTION_DET_DUR, motDUR )
         
         #to register 0x69, write the motion detection decrement and 
         #a few other settings (for example write 0x15 to set both 
         #free-fall and motion decrements to 1 and accelerome0x00ter 
         #start-up delay to 5ms total by adding 1ms. )
-        self.sendCmd( self.REG_MOTION_DET_CTRL, mot_dete_dec )
+        self._sendCmd( self.REG_MOTION_DET_CTRL, motDeteDec )
 
         #write register 0x38, bit 6 (0x40), to enable motion detection interrupt.
-        self.sendCmd( self.REG_INT_ENABLE, self.VAL_INT_ENABLE_MOTION )
+        self._sendCmd( self.REG_INT_ENABLE, self.VAL_INT_ENABLE_MOTION )
 
     def setDataRdyInt(self, int_cfg = 0x20 ):
-        """Set to enabled Data Ready Interrupt
-            int_cfg : Register 55( 0x37 ) – INT Pin / Bypass Enable Configuration, page 26
+        """!
+        \~english 
+        Set to enabled Data Ready Interrupt
+        int_cfg : Register 55( 0x37 ) – INT Pin / Bypass Enable Configuration, page 26
+        
+        \~chinese 
+        启用数据就绪中断
+        @param int_cfg: 寄存器 55( 0x37 ) – INT Pin / Bypass Enable Configuration, page 26
         """
-        self.sendCmd( self.REG_INT_PIN_CFG, int_cfg )
-        self.sendCmd( self.REG_INT_ENABLE, self.VAL_INT_ENABLE_DATA_RDY)
+        self._sendCmd( self.REG_INT_PIN_CFG, int_cfg )
+        self._sendCmd( self.REG_INT_ENABLE, self.VAL_INT_ENABLE_DATA_RDY)
 
     def disableInt(self):
-        """Trun Off Interrupt
+        """!
+            Trun Off Interrupt
         """
-        self.sendCmd( self.REG_INT_ENABLE, self.VAL_INT_ENABLE_DISABLED )
+        self._sendCmd( self.REG_INT_ENABLE, self.VAL_INT_ENABLE_DISABLED )
 
     def getIntDataRdy(self):
-        """Read INT status ( data ready, motion detect, etc. ) and clear INT status after readed
-        
-        MPU-6050 Register Map and Descriptions revision 4.2, page 28 -- Register 58(0x3A) – Interrupt Status
+        """!
+        \~english
+        Read INT status ( data ready, motion detect, etc. ) and clear INT status after read
+        MPU6050 Register Map and Descriptions revision 4.2, page 28 
+        Register 58(0x3A) – Interrupt Status
+        \~chinese
+        读取 INT 状态（数据就绪，运动检测等）并清除 INT 状态
+        MPU6050寄存器映射和描述修订4.2，第28页
+        寄存器58（0x3A）- 中断状态
         """
-        return self.readByte( self.REG_INT_STATUS )
+        return self._readByte( self.REG_INT_STATUS )
 
     def getTemp(self):
-        """Reads the temperature from the onboard temperature sensor of the MPU-6050.
-            Returns the temperature in degrees Celcius.
+        """!
+        \~english
+        Reads the temperature from the onboard temperature sensor of the MPU-6050.
+        @returns a float value, the temperature in degrees Celcius.
+        @note MPU6050 Register Map and Descriptions revision 4.2, page 30
+        \~chinese
+        MPU-6050 的板载温度传感器读取温度
+        @returns 浮点值，温度以摄氏度为单位
+        @note MPU6050寄存器映射和描述修订4.2，第30页
         """
-        rawTemp = self.readWord( self.REG_TEMP_OUT_H )
+        rawTemp = self._readWord( self.REG_TEMP_OUT_H )
         return (rawTemp + 12412.0) / 340.0
         # Get the actual temperature using the formule given in the
         # MPU-6050 Register Map and Descriptions revision 4.2, page 30
@@ -308,34 +396,47 @@ class MPU6050:
 #         return ( rawTemp / 340.0 ) + 36.53
 
     def setAccelRange(self, accelRange):
-        """Sets the range of the accelerometer to range.
-
-        accelRange -- the range to set the accelerometer to. 
-        Using a pre-defined range is advised.
+        """!
+        Sets the range of the accelerometer to range.
+        @param accelRange The range to set the accelerometer to.
+          It should be one of the following values:
+              @see ACCEL_RANGE_2G
+              @see ACCEL_RANGE_4G
+              @see ACCEL_RANGE_8G
+              @see ACCEL_RANGE_16G
+        @note Using a pre-defined range is advised.
         """
-        self.sendCmd( self.REG_ACCEL_CONFIG, accelRange )
+        self._sendCmd( self.REG_ACCEL_CONFIG, accelRange )
 
     def readAccelRange( self ):
-        """Reads the range the accelerometer is set to.
-
-        If raw is True, it will return the raw value from the ACCEL_CONFIG register
-        If raw is False, it will return an integer: -1, 2, 4, 8 or 16. When it
-        returns -1 something went wrong.
+        """!
+        Reads the range of accelerometer setup.
+        
+        @return an int value.
+          It should be one of the following values:
+              @see ACCEL_RANGE_2G
+              @see ACCEL_RANGE_4G
+              @see ACCEL_RANGE_8G
+              @see ACCEL_RANGE_16G
         """
-        raw_data = self.readByte(self.REG_ACCEL_CONFIG)
+        raw_data = self._readByte(self.REG_ACCEL_CONFIG)
         raw_data = (raw_data | 0xE7) ^ 0xE7
         return raw_data
 
     def getAccelData( self,  raw = False ):
-        """Gets and returns the X, Y and Z values from the accelerometer.
+        """!
+        Gets and returns the X, Y and Z values from the accelerometer.
 
-        If raw is True, it will return the data in m/s^2
-        If raw is False, it will return the data in g
-        Returns a dictionary with the measurement results.
+        @param raw If raw is True, it will return the data in m/s^2,<br> If raw is False, it will return the data in g
+        @return a dictionary with the measurement results or Boolean.
+            @retval {...} data in m/s^2 if raw is True.
+            @retval {...} data in g if raw is False.
+            @retval False mean is 'Unkown accel range', that you need to check the "accel range" configuration
+        @note Result data format: {"x":0.45634,"y":0.2124,"z":1.334}
         """
-        x = self.readWord(self.REG_ACCEL_XOUT_H)
-        y = self.readWord(self.REG_ACCEL_YOUT_H)
-        z = self.readWord(self.REG_ACCEL_ZOUT_H)
+        x = self._readWord(self.REG_ACCEL_XOUT_H)
+        y = self._readWord(self.REG_ACCEL_YOUT_H)
+        z = self._readWord(self.REG_ACCEL_ZOUT_H)
 
         accel_scale_modifier = None
         accel_range = self.readAccelRange()
@@ -349,8 +450,9 @@ class MPU6050:
         elif accel_range == self.ACCEL_RANGE_16G:
             accel_scale_modifier = self.ACCEL_SCALE_MODIFIER_16G
         else:
-            print( "Unkown range - accel_scale_modifier set to self.ACCEL_SCALE_MODIFIER_2G " )
-            accel_scale_modifier = self.ACCEL_SCALE_MODIFIER_2G
+            print( "ERROR: Unkown accel range!" )
+            return False            
+            #accel_scale_modifier = self.ACCEL_SCALE_MODIFIER_2G
 
         x = x / accel_scale_modifier
         y = y / accel_scale_modifier
@@ -362,30 +464,46 @@ class MPU6050:
             return { 'x': x * self._gravityFactor, 'y': y * self._gravityFactor, 'z': z * self._gravityFactor }
 
     def setGyroRange(self, gyroRange):
-        """Sets the range of the gyroscope to range.
-        gyroRange -- the range to set the gyroscope to. Using a pre-defined
-        range is advised.
+        """!
+        Sets the range of the gyroscope to range.
+        @param gyroRange The range to set the gyroscope to.
+          It should be one of the following values:
+              @see GYRO_RANGE_250DEG
+              @see GYRO_RANGE_500DEG
+              @see GYRO_RANGE_1KDEG
+              @see GYRO_RANGE_2KDEG 
+
+        @note Using a pre-defined range is advised.
         """
-        self.sendCmd( self.REG_GYRO_CONFIG, gyroRange )
+        self._sendCmd( self.REG_GYRO_CONFIG, gyroRange )
 
     def readGyroRange( self ):
-        """Reads the range the gyroscope is set to.
+        """!
+        Reads the range of gyroscope setup.
 
-        If raw is True, it will return the raw value from the GYRO_CONFIG register.
-        If raw is False, it will return 250, 500, 1000, 2000 or -1. If the
-        returned value is equal to -1 something went wrong.
+        @return an int value. It should be one of the following values (GYRO_RANGE_250DEG)
+
+        @see GYRO_RANGE_250DEG
+        @see GYRO_RANGE_500DEG
+        @see GYRO_RANGE_1KDEG
+        @see GYRO_RANGE_2KDEG
         """
-        raw_data = self.readByte( self.REG_GYRO_CONFIG )
+        raw_data = self._readByte( self.REG_GYRO_CONFIG )
         raw_data = (raw_data | 0xE7) ^ 0xE7
         return raw_data
 
     def getGyroData(self):
-        """Gets and returns the X, Y and Z values from the gyroscope.
-        Returns the read values in a dictionary.
+        """!
+        Gets and returns the X, Y and Z values from the gyroscope
+
+        @return a dictionary with the measurement results or Boolean.
+            @retval {...} a dictionary data.
+            @retval False mean is 'Unkown gyroscope range', that you need to check the "gyroscope range" configuration
+        @note Result data format: {"x":0.45634,"y":0.2124,"z":1.334}
         """
-        x = self.readWord(self.REG_GYRO_XOUT_H)
-        y = self.readWord(self.REG_GYRO_YOUT_H)
-        z = self.readWord(self.REG_GYRO_ZOUT_H)
+        x = self._readWord(self.REG_GYRO_XOUT_H)
+        y = self._readWord(self.REG_GYRO_YOUT_H)
+        z = self._readWord(self.REG_GYRO_ZOUT_H)
 
         gyro_scale_modifier = None
         gyro_range = self.readGyroRange()
@@ -394,21 +512,33 @@ class MPU6050:
             gyro_scale_modifier = self.GYRO_SCALE_MODIFIER_250DEG
         elif gyro_range == self.GYRO_RANGE_500DEG:
             gyro_scale_modifier = self.GYRO_SCALE_MODIFIER_500DEG
-        elif gyro_range == self.GYRO_RANGE_1000DEG:
-            gyro_scale_modifier = self.GYRO_SCALE_MODIFIER_1000DEG
-        elif gyro_range == self.GYRO_RANGE_2000DEG:
-            gyro_scale_modifier = self.GYRO_SCALE_MODIFIER_2000DEG
+        elif gyro_range == self.GYRO_RANGE_1KDEG:
+            gyro_scale_modifier = self.GYRO_SCALE_MODIFIER_1KDEG
+        elif gyro_range == self.GYRO_RANGE_2KDEG:
+            gyro_scale_modifier = self.GYRO_SCALE_MODIFIER_2KDEG
         else:
-            print("Unkown range - gyro_scale_modifier set to self.GYRO_SCALE_MODIFIER_250DEG")
-            gyro_scale_modifier = self.GYRO_SCALE_MODIFIER_250DEG
+            print("ERROR: Unkown gyroscope range!")
+            return False
+            #gyro_scale_modifier = self.GYRO_SCALE_MODIFIER_250DEG
 
         x = x / gyro_scale_modifier
         y = y / gyro_scale_modifier
         z = z / gyro_scale_modifier
         return {'x': x, 'y': y, 'z': z}
 
+
     def getAllData(self, temp = True, accel = True, gyro = True):
-        """Reads and returns all the available data."""
+        """!
+        Reads and returns all the available data.
+
+        @param temp: True - Allow to return Temperature data
+        @param accel: True - Allow to return Accelerometer data
+        @param gyro: True - Allow to return Gyroscope data
+
+        @return a dictionary data
+            @retval {} Did not read any data
+            @retval {"temp":32.3,"accel":{"x":0.45634,"y":0.2124,"z":1.334},"gyro":{"x":0.45634,"y":0.2124,"z":1.334}} Returned all data
+        """
         allData = {}
         if temp:
             allData["temp"] = self.getTemp()
@@ -421,19 +551,21 @@ class MPU6050:
 
         return allData
 
-if __name__ == "__main__":
-    mpu = mpu6050( DEF_MPU6050_ADDRESS )
-    print("REG_PWR_MGMT_1: {:#4x}".format(mpu.readByte(mpu.REG_PWR_MGMT_1)))
-#     mpu.reset()
-    mpu.setAccelRange( mpu.ACCEL_RANGE_2G )
-    mpu.open()
-    print("REG_PWR_MGMT_1: {:#4x}".format(mpu.readByte(mpu.REG_PWR_MGMT_1)))
-    print("Accel Range: {:#4x} -- {:d}g".format(mpu.readAccelRange(), mpu.readAccelRange()))
-    print("Gryo Range: {:#4x}".format(mpu.readGyroRange()))
-
-    print (mpu.getAccelData( False ))
-    print ("---------------------")
-
-    allData = mpu.getAllData()
-    print (allData)
-    mpu.sleep()
+#
+# This a simple test
+# if __name__ == "__main__":
+#     mpu = mpu6050( DEF_MPU6050_ADDRESS )
+#     print("REG_PWR_MGMT_1: {:#4x}".format(mpu._readByte(mpu.REG_PWR_MGMT_1)))
+# #     mpu.reset()
+#     mpu.setAccelRange( mpu.ACCEL_RANGE_2G )
+#     mpu.open()
+#     print("REG_PWR_MGMT_1: {:#4x}".format(mpu._readByte(mpu.REG_PWR_MGMT_1)))
+#     print("Accel Range: {:#4x} -- {:d}g".format(mpu.readAccelRange(), mpu.readAccelRange()))
+#     print("Gryo Range: {:#4x}".format(mpu.readGyroRange()))
+# 
+#     print (mpu.getAccelData( False ))
+#     print ("---------------------")
+# 
+#     allData = mpu.getAllData()
+#     print (allData)
+#     mpu.sleep()
