@@ -43,7 +43,6 @@ class SSPoint:
     """
     x = 0
     y = 0
-    pass
 
 class SSRect:
     """!
@@ -111,7 +110,7 @@ class SSRect:
         """
         self.x = newX
         self.y = newY
-    
+
     def moveOffset(self, offsetX=0, offsetY=0):
         """!
         \~english 
@@ -127,7 +126,7 @@ class SSRect:
         """
         self.x += offsetX
         self.y += offsetY
-    
+
     def swapWH(self):
         """!
         \~english Swap width and height of rectangles
@@ -160,6 +159,7 @@ class SScreenBase:
     You need to create a subclass from inherit it and 
     use the new subclass implement initialization and 
     operations of screen.
+
     \~chinese
     SScreenBase是屏幕的硬件抽象，它包含一个 Display，一个 Canvas 和一个 View 实例
     你需要通过继承和创建一个子类, 使用新的子类实现初始化和屏幕的操作。
@@ -185,18 +185,17 @@ class SScreenBase:
     
     ##
     # display color mode, it is readonly, can not be change. 
-    # it can be choose: SS_COLOR_MODE_MONO ("1"): greyscale or SS_COLOR_MODE_RGB ("RGB"): image
+    # it can be chosen: SS_COLOR_MODE_MONO ("1"): greyscale or SS_COLOR_MODE_RGB ("RGB"): image
     _display_color_mode = None #SS_COLOR_MODE_MONO
     
     ##
-    # buffer color mode, it is can be change with SScreenBase#changeBufferColorMode
-    # it can diffent with _display_color_mode
-    # it can be choose: SS_COLOR_MODE_MONO ("1"): greyscale or SS_COLOR_MODE_RGB ("RGB"): image
+    # buffer color mode, it is can be change using SScreenBase#changeBufferColorMode,
+    # and it can diffent from _display_color_mode,
+    # its value could be: SS_COLOR_MODE_MONO ("1"): greyscale or SS_COLOR_MODE_RGB ("RGB"): color
     _buffer_color_mode = None #SS_COLOR_MODE_MONO
 
     ##
-    # Screen buffer, it is size can diffent with display size.
-    # 
+    # Screen buffer, its size can diffent from display size.
     _buffer = None
 
     def __init__(self, display, bufferColorMode, bufferSize=None, displayDirection=0 ):
@@ -204,14 +203,13 @@ class SScreenBase:
 
     def _initDisplay(self, display, displayDirection, displaySize=(0,0)):
         self._display_direction = displayDirection
-        
+
         if self._needSwapWH():
             self._display_size = ( displaySize[1], displaySize[0] )
         else:
             self._display_size = displaySize
 
         self.Display = display
-        pass
 
     def _initBuffer(self, bufferColorMode, bufferSize):
         self._buffer_color_mode = bufferColorMode
@@ -235,13 +233,13 @@ class SScreenBase:
         \~english
         Check buffer color mode
         @param bufferColorMode: 
+
         \~chinese
         检测缓存色彩模式
         @param bufferColorMode: 
         """
         if bufferColorMode != SS_COLOR_MODE_RGB and bufferColorMode != SS_COLOR_MODE_MONO:
-            raise ValueError("Incorrect bufferColorMode mode, this value just choose in: \"RGB\" and \"1\" ")
-        pass
+            raise ValueError("Incorrect bufferColorMode mode, this value just can be chosen: \"RGB\" or \"1\" ")
 
     def refresh(self):
         """!
@@ -272,8 +270,8 @@ class SScreenBase:
         """!
         \~english 
         Change buffer color mode
-        @param newColorMode: new color mode. it can be choose: { SS_COLOR_MODE_MONO | SS_COLOR_MODE_RGB }
-        \~chinese 
+        @param newColorMode: new color mode. it can be chosen: { SS_COLOR_MODE_MONO | SS_COLOR_MODE_RGB }
+        \~chinese
         改变缓存色彩模式
         @param newColorMode: 新色彩模式。 可选值： SS_COLOR_MODE_MONO 或 SS_COLOR_MODE_RGB
 

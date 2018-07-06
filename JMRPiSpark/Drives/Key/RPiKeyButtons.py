@@ -24,7 +24,7 @@
 #
 # #########################################################
 #
-# RPi Spark Shield -- Key Buttons
+# RPi Spark pHAT -- Key Buttons
 # Keyboard include Joystick buttons and Action buttons, 
 # keyboard use BCM mode, there are keyboard layout:
 # 
@@ -58,8 +58,8 @@ DEF_BOUNCE_TIME_LONG        = 200
 #SparkKeyboard
 class RPiKeyButtons :
     """!
-    \~english This RPi Spark Shield Key Buttons Drive
-    \~chinese 树梅派火花(RPi Spark Shield) 按键驱动
+    \~english This RPi Spark pHAT Key Buttons Drive
+    \~chinese 树梅派火花(RPi Spark pHAT) 按键驱动
     """
     def __init__(self):
         GPIO.setwarnings(False)
@@ -72,7 +72,7 @@ class RPiKeyButtons :
         Set key button event
         @param btnId: Key button pin number in BCM
         @param keyCallback: A interrupt <b>callback_function</b> or <b>None</b>. <br>
-               If set to <b>None</b> mean is keybutton work in query mode<br>
+               If set to <b>None</b> means keybutton work in query mode<br>
                then uses RPiKeyButtons#readKeyButton for get keybutton status
         @param bounceTime: Default set to DEF_BOUNCE_TIME_NORMAL
         @param pullUpDown: Default set to GPIO.PUD_UP
@@ -105,7 +105,7 @@ class RPiKeyButtons :
                 </pre>
         """
         GPIO.setup( btnId, GPIO.IN, pull_up_down=pullUpDown)
-        # The keyCallback is None mean is setting keybutton in query mode, 
+        # The keyCallback is None means setting keybutton in query mode, 
         # then uses readKeyButton for get keybutton status
         # event can be { RISING, FALLING, BOTH }
         if keyCallback != None:

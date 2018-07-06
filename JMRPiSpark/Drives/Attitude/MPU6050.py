@@ -174,14 +174,14 @@ class MPU6050:
         Initialize the MPU6050 object instance
 
         @param address        MPU6050 I2C Address (default is: 0x68)
-        @param busId          I2C Bus ID of Raspberry Pi. RPi Spark Shield default is 1
+        @param busId          I2C Bus ID of Raspberry Pi. RPi Spark pHAT default is 1
         @param gravityFactor  Default is GRAVITIY_EARTH
         
         \~chinese
         初始化 MPU6050 实例
 
         @param address        MPU6050 I2C 地址（默认为：0x68）
-        @param busId          树梅派( Raspberry Pi ) I2C 总线 ID。 RPi Spark Shield 默认值为 1
+        @param busId          树梅派( Raspberry Pi ) I2C 总线 ID。 RPi Spark pHAT 默认值为 1
         @param gravityFactor  默认 GRAVITIY_EARTH ( 地球重力加速度 )
 
         \~ \n
@@ -230,13 +230,13 @@ class MPU6050:
 
     def openWith(self, accel = True, gyro = True, temp = True, cycle = False, cycleFreq = 0x00):
         """!
-        Trun on device and configurable sensor and wake up mode at same time
+        Trun on device with configurable sensors into wake up mode
         
         @param accel: True - Enable accelerometer
         @param gyro: True - Enable gyroscope
         @param temp: True - Enable Thermometer
         @param cycle: True - Enable cycle wake-up mode
-        @param cycleFreq: Cycle wake-up frequency, this value can be choise:
+        @param cycleFreq: Cycle wake-up frequency, this value can be chosen:
 
           @see VAL_PWR_MGMT_2_LP_WAKE_CTRL_1_25HZ is default
           @see VAL_PWR_MGMT_2_LP_WAKE_CTRL_5HZ
@@ -367,11 +367,14 @@ class MPU6050:
     def getIntDataRdy(self):
         """!
         \~english
-        Read INT status ( data ready, motion detect, etc. ) and clear INT status after read
+        Get data ready interrupt status (data ready, motion detection, etc.) 
+        After calling this method the data ready interrupt flag will be reset, 
+        waiting for the next data ready interrupt
+
         MPU6050 Register Map and Descriptions revision 4.2, page 28 
         Register 58(0x3A) – Interrupt Status
         \~chinese
-        读取 INT 状态（数据就绪，运动检测等）并清除 INT 状态
+        读取数据就绪中断状态（数据就绪，运动检测等），调用该方法后数据就绪中断标志位将复位，等待下一次数据就绪中断
         MPU6050寄存器映射和描述修订4.2，第28页
         寄存器58（0x3A）- 中断状态
         """
@@ -397,8 +400,8 @@ class MPU6050:
 
     def setAccelRange(self, accelRange):
         """!
-        Sets the range of the accelerometer to range.
-        @param accelRange The range to set the accelerometer to.
+        Set range of accelerometer.
+        @param accelRange: range of accelerometer.
           It should be one of the following values:
               @see ACCEL_RANGE_2G
               @see ACCEL_RANGE_4G
@@ -431,7 +434,7 @@ class MPU6050:
         @return a dictionary with the measurement results or Boolean.
             @retval {...} data in m/s^2 if raw is True.
             @retval {...} data in g if raw is False.
-            @retval False mean is 'Unkown accel range', that you need to check the "accel range" configuration
+            @retval False means 'Unkown accel range', that you need to check the "accel range" configuration
         @note Result data format: {"x":0.45634,"y":0.2124,"z":1.334}
         """
         x = self._readWord(self.REG_ACCEL_XOUT_H)
@@ -465,8 +468,8 @@ class MPU6050:
 
     def setGyroRange(self, gyroRange):
         """!
-        Sets the range of the gyroscope to range.
-        @param gyroRange The range to set the gyroscope to.
+        Set range of gyroscope.
+        @param gyroRange: range of gyroscope.
           It should be one of the following values:
               @see GYRO_RANGE_250DEG
               @see GYRO_RANGE_500DEG
@@ -479,7 +482,7 @@ class MPU6050:
 
     def readGyroRange( self ):
         """!
-        Reads the range of gyroscope setup.
+        Read range of gyroscope.
 
         @return an int value. It should be one of the following values (GYRO_RANGE_250DEG)
 
@@ -498,7 +501,7 @@ class MPU6050:
 
         @return a dictionary with the measurement results or Boolean.
             @retval {...} a dictionary data.
-            @retval False mean is 'Unkown gyroscope range', that you need to check the "gyroscope range" configuration
+            @retval False means 'Unkown gyroscope range', that you need to check the "gyroscope range" configuration
         @note Result data format: {"x":0.45634,"y":0.2124,"z":1.334}
         """
         x = self._readWord(self.REG_GYRO_XOUT_H)
@@ -529,7 +532,7 @@ class MPU6050:
 
     def getAllData(self, temp = True, accel = True, gyro = True):
         """!
-        Reads and returns all the available data.
+        Get all the available data.
 
         @param temp: True - Allow to return Temperature data
         @param accel: True - Allow to return Accelerometer data

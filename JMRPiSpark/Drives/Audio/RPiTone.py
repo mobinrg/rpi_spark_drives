@@ -106,33 +106,44 @@ class RPiTonePlayer:
     \~english Use PWM to play tones
     \~chinese 使用PWM播放音符
     """
-    TONE_DUTY = 50
+    TONE_DUTY = None
     MUTE_TONE = 0
 
     _pinPWM = None
     _pwmPlayer = None
 
-    def __init__(self, pinPWM = None):
+    def __init__(self, pinPWM = None, toneDuty = 20):
         """!
         \~english
         Initialize the RPiTonePlayer object instance.
-        @param pinPWM This is a GPIO number of PWM for output
-        @note on Raspberry Pi pwm output io you can choose in (BCM Mode): 12, 13, 18
+        @param pinPWM: This is a GPIO number of PWM for output
+        @param toneDuty: The width of the pulse, 
+                         its value can be chosen: 5 ~ 60
+        @note on Raspberry Pi pwm output io you can be chosen in (BCM Mode): 12, 13, 18
 
         \~chinese
         初始化 RPiTonePlayer 对象实例
-        @param pinPWM: 用于输出的 PWM 的 GPIO IO 编号
+        @param pinPWM: 输出的 PWM 的 GPIO IO 编号
+        @param toneDuty: 控制脉冲的宽度, 取值： 5 ~ 50
         @note 树莓派 pwm 输出可以选择（BCM模式）：12,13,18
         """
         self._pinPWM = pinPWM
+
+        if toneDuty>50:
+            self.TONE_DUTY = 50
+        elif toneDuty<5:
+            self.TONE_DUTY = 5
+        else:
+            self.TONE_DUTY = toneDuty
+
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self._pinPWM, GPIO.OUT)
 
     def _initPWMPlayer(self, freq):
         self._pwmPlayer = GPIO.PWM(self._pinPWM, freq)  # channel=12 frequency=50Hz
-        self._pwmPlayer.start(self.TONE_DUTY)
-        self._pwmPlayer.stop()
+        #self._pwmPlayer.start(self.TONE_DUTY)
+        #self._pwmPlayer.stop()
 
     def _delay(self, delay = 0):
         startTime=time()
@@ -154,7 +165,7 @@ class RPiTonePlayer:
         \~english 
         @param freq
         @param reps
-        @param delay >= 0(s) if 0 mean is do not delay. tone play will be Stop immediately <br>
+        @param delay >= 0(s) if 0 means do not delay. tone play will be Stop immediately <br>
         @param muteDelay >= 0(s) If 0 means no pause after playing, play the next note immediately
         \~chinese 
         @param freq: 频率
@@ -204,7 +215,7 @@ class RPiTonePlayer:
             ]
            </pre>\n
         \~english
-        \e delay: >= 0(s) if 0 mean is do not delay. tone play will be Stop immediately <br>
+        \e delay: >= 0(s) if 0 means do not delay. tone play will be Stop immediately <br>
         \e muteDelay: 0.15 >= 0(s) If 0 means no pause after playing, play the next note immediately
         \~chinese
         \e delay: >= 0（s）如果是 0 意味着不延迟。 音调会立即停止播放 <br>

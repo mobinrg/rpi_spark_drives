@@ -214,7 +214,7 @@ class SSD1306Base( RPiDiaplay ):
     def init(self):
         """!
         \~english
-        Initialize the SSD1306 display chip, and ready for show samething
+        Initialize the SSD1306 display chip, and ready for show something
         \~chinese
         初始化SSD1306显示芯片，并准备好接收显示命令和数据
         """
@@ -227,7 +227,7 @@ class SSD1306Base( RPiDiaplay ):
         \~english
         Clear buffer data and fill color into buffer
         @param fill: a color value, it will fill into buffer.<br>
-                The SSD1306 only choose two colors: <br>
+                The SSD1306 only chosen two colors: <br>
                    0 (0x0): black <br>
                    1 (0x1): white <br>
 
@@ -366,9 +366,9 @@ class SSD1306Base( RPiDiaplay ):
         """!
         \~english 
         Scroll screen
-        @param hStart: Set horizontal scroll PAGE start address, value can be chose between 0 and 7
+        @param hStart: Set horizontal scroll PAGE start address, value can be chosen between 0 and 7
         @param hEnd:  Set horizontal scroll PAGE end address, value can be chose between 0 and 7
-        @param vOffset: Vertical scroll offset row, if set to 0x00(0) mean is off vertical scroll
+        @param vOffset: Vertical scroll offset row, if set to 0x00(0) means off vertical scroll
         @param vStart: Vertical scroll start line, value can be chose between 0x00 and screen.height
         @param vEnd: Vertical scroll end line, value can be chose between 0x00 and screen.height
         @param int: Set time interval between each scroll step

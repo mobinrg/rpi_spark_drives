@@ -49,7 +49,7 @@ class RPiAudioDevice:
         Initialize the RPiAudioDevice object instance.
         @param pinRight: Audio right channel IO. "None" means channel disabled
         @param pinLeft: Audio left channel IO. "None" means channel disabled
-        @note On Raspberry Pi the audio channel IO can be choose in ( GPIO in BCM MODE ): 12, 13, 18
+        @note On Raspberry Pi the audio channel IO can be chosen in ( GPIO in BCM MODE ): 12, 13, 18
         
         \~chinese
         初始化 RPiAudioDevice 对象实例。

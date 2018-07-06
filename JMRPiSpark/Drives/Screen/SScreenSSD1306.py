@@ -48,7 +48,7 @@ class SScreenSSD1306( SSPILScreen ):
         \~english
         Initialize the SScreenSSD1306 object instance
         @param display: a display hardware instance, eg. SSD1306
-        @param bufferColorMode: color mode, can be choose: SS_COLOR_MODE_MONO ("1") or SS_COLOR_MODE_RGB ("RGB")
+        @param bufferColorMode: color mode, can be chosen: SS_COLOR_MODE_MONO ("1") or SS_COLOR_MODE_RGB ("RGB")
         @param bufferSize: size of buffer, eg. (128,64) or (320, 240) ...
         @param displayDirection: direction of display, can be: 0, 90, 180, 270
         

@@ -1,5 +1,5 @@
 #
-# RPi Spark Shield Drives
+# RPi Spark pHAT Drives
 # Author: Kunpeng Zhang
 # 2018.6.6
 #
@@ -34,20 +34,20 @@ keywords = (
 	"gpio extended pads"
 )
 
-desc = 'The Raspberry Pi Spark Shield board allows you to easily develop interesting applications use the GPIO of Raspberry Pi. It included SSD1306 128x64 OLED, MPU6050 Sensor (Gyroscope, Accelerometer, Thermometer Sensor), 5 ways joystick, 2 action keys, 3.5mm stereo headphone jack, Speaker and 20 extended GPIO pads'
+desc = 'The Raspberry Pi Spark pHat board let you to easily develop interesting applications use the GPIO of Raspberry Pi. It included SSD1306 128x64 OLED, MPU6050 Sensor (Gyroscope, Accelerometer, Thermometer Sensor), 5 ways joystick, 2 action keys, 3.5mm stereo headphone jack, Speaker and 20 extended GPIO pads'
 
 setup (
 	name              = 'JMRPi.Spark',
 	version           = '1.0.4',
 	author            = 'Kunpeng Zhang',
-	author_email      = 'kenz@mobinrg.com',
+	author_email      = 'support@mobinrg.com',
 	description       = desc,
 	long_description  = desc,
 	platforms		  = ['Linux'],
 	license           = 'MIT',
 	classifiers        = classifiers,
 	keywords	  	  = keywords,
-	url               = 'https://github.com/PowerRocker/rpi_spark_drives',
+	url               = 'https://github.com/mobinrg/rpi_spark_drives',
 	dependency_links  = [],
 	install_requires  = [],
 	packages          = find_packages()
