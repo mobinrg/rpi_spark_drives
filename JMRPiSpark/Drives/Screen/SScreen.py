@@ -204,7 +204,7 @@ class SScreenBase:
     def _initDisplay(self, display, displayDirection, displaySize=(0,0)):
         self._display_direction = displayDirection
 
-        if self._needSwapWH():
+        if self._needSwapWH(0, displayDirection):
             self._display_size = ( displaySize[1], displaySize[0] )
         else:
             self._display_size = displaySize
@@ -214,7 +214,7 @@ class SScreenBase:
     def _initBuffer(self, bufferColorMode, bufferSize):
         self._buffer_color_mode = bufferColorMode
 
-    def _needSwapWH(self):
+    def _needSwapWH(self, oldDirection, newDirection ):
         """!
         \~english
         return screen direction status
@@ -226,7 +226,10 @@ class SScreenBase:
         @return 布尔值
         @note 如果屏幕方向是0度和180度就不需要旋转
         """
-        return (self._display_direction != 0 and self._display_direction != 180 )
+        if abs(newDirection - oldDirection) == 0: return False
+        if abs(newDirection - oldDirection) % 180 == 0: return False
+        if abs(newDirection - oldDirection) % 90 == 0: return True
+        return False
 
     def _checkBufferColorMode(self, bufferColorMode):
         """!
@@ -254,6 +257,25 @@ class SScreenBase:
         \~chinese 清屏
         """
         raise NotImplementedError
+
+    def rotateDirection(self, displayDirection):
+        """!
+        \~english rotate screen direction
+        @param displayDirection: Screen Direction. value can be chosen: 0, 90, 180, 270
+        \~chinese 旋转显示屏方向
+        @param displayDirection: 显示屏方向。可选值： 0, 90, 180, 270
+        
+        \~
+        @note
+        \~english after rotate the View resize to screen size 
+        \~chinese 改变方向后，默认的 View 大小会更新为当前 Screen 的大小
+        \~\n
+        """
+        if self._needSwapWH(self._display_direction, displayDirection):
+            self._display_size = ( self._display_size[1], self._display_size[0] )
+            if self.redefineBuffer( { "size":self._display_size, "color_mode":self._buffer_color_mode } ):
+                self.View.resize(self._display_size[0], self._display_size[1])
+        self._display_direction = displayDirection
 
     def redefineBuffer(self, newFrame ):
         """!

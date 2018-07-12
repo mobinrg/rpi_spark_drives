@@ -38,7 +38,7 @@ desc = 'The Raspberry Pi Spark pHat board let you to easily develop interesting 
 
 setup (
 	name              = 'JMRPi.Spark',
-	version           = '1.0.4',
+	version           = '1.0.5',
 	author            = 'Kunpeng Zhang',
 	author_email      = 'support@mobinrg.com',
 	description       = desc,

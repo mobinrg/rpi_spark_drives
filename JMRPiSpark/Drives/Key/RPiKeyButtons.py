@@ -156,7 +156,7 @@ class RPiKeyButtons :
         读取按钮IO状态
         @return 布尔值
         """
-        return GPIO.input(btnId)
+        return GPIO.input(btnId) if btnId != None else False
 
     def configKeyButtons( self, enableButtons = [], bounceTime = DEF_BOUNCE_TIME_NORMAL, pullUpDown = GPIO.PUD_UP, event = GPIO.BOTH ):
         """!

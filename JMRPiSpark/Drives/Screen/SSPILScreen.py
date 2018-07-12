@@ -178,16 +178,18 @@ class SSPILScreen( SScreenBase ):
         if type(self._buffer) == type(newBuffer):
             self._buffer = newBuffer
             self.Canvas = ImageDraw.Draw( self._buffer )
+#             self.View.resize(newBuffer.width, newBuffer.height)
             return True
-        
+
         # Redefine Frame from an <PIL.ImageFile.ImageFile>
         if type(newBuffer).__name__.find(PIL.ImageFile.ImageFile.__name__) != -1:        
             self._buffer = self._buffer.resize((newBuffer.width, newBuffer.height))
             self._buffer.paste( newBuffer, (0,0))
+#             self.View.resize(newBuffer.width, newBuffer.height)
             return True
 
         # Recreated a new frame from dict of frame
-        if isinstance(newBuffer, {}):
+        if isinstance(newBuffer, dict):
             self._buffer = Image.new( newBuffer["color_mode"] , newBuffer["size"] )
             self.Canvas = ImageDraw.Draw( self._buffer )
             return True
