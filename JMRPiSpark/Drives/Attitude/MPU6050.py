@@ -174,14 +174,14 @@ class MPU6050:
         Initialize the MPU6050 object instance
 
         @param address        MPU6050 I2C Address (default is: 0x68)
-        @param busId          I2C Bus ID of Raspberry Pi. RPi Spark pHAT default is 1
+        @param busId          I2C Bus ID of Raspberry Pi. RPi-Spark pHAT default is 1
         @param gravityFactor  Default is GRAVITIY_EARTH
         
         \~chinese
         初始化 MPU6050 实例
 
         @param address        MPU6050 I2C 地址（默认为：0x68）
-        @param busId          树梅派( Raspberry Pi ) I2C 总线 ID。 RPi Spark pHAT 默认值为 1
+        @param busId          树梅派( Raspberry Pi ) I2C 总线 ID。 RPi-Spark pHAT 默认值为 1
         @param gravityFactor  默认 GRAVITIY_EARTH ( 地球重力加速度 )
 
         \~ \n

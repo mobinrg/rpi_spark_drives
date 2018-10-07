@@ -24,7 +24,7 @@
 #
 # #########################################################
 #
-# RPi Spark pHAT -- Key Buttons
+# RPi-Spark pHAT -- Key Buttons
 # Keyboard include Joystick buttons and Action buttons, 
 # keyboard use BCM mode, there are keyboard layout:
 # 
@@ -58,8 +58,8 @@ DEF_BOUNCE_TIME_LONG        = 200
 #SparkKeyboard
 class RPiKeyButtons :
     """!
-    \~english This RPi Spark pHAT Key Buttons Drive
-    \~chinese 树梅派火花(RPi Spark pHAT) 按键驱动
+    \~english This RPi-Spark pHAT Key Buttons Drive
+    \~chinese 树梅派火花(RPi-Spark pHAT) 按键驱动
     """
     def __init__(self):
         GPIO.setwarnings(False)

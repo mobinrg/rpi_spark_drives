@@ -24,7 +24,7 @@
 #
 # #########################################################
 #
-#    RPi Spark Tone
+#    RPi-Spark Tone
 #    @author Kunpeng Zhang
 #    v1.0.0    2018.5.29
 #

@@ -24,7 +24,7 @@
 #
 # #########################################################
 #
-#    RPi Spark PILScreen
+#    RPi-Spark PILScreen
 #    by Kunpeng Zhang
 #    v1.0.0
 #    
@@ -34,11 +34,14 @@
 import types
 
 import PIL
+from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
 
 from .SScreen import SScreenBase
 from .SScreen import SSRect
+
+SCR_DEF_FRONT = ImageFont.load_default()
 
 class SSPILScreen( SScreenBase ):
     """!
@@ -195,4 +198,50 @@ class SSPILScreen( SScreenBase ):
             return True
         pass
 
-    pass
+    def write(self, text="", xy=(0,0), align="left", font=None, fontName=None, fontSize = 10, fill = 1, spacing = 0, screenCenter = False):
+        """!
+        \~english 
+        Print one line text or multi-line text on the screen
+        @param text: Text to be drawn. eg. "Hello World!" or "Hello/nWorld!"
+        @param xy: Top left corner of the text. defaule: (0,0)
+        @param align: "left", "center" or "right". defaule: "left"
+        @param fontName: Font of text. defaule: None (default font) 
+        @param fontSize: Font size. default: 10
+        @param fill: Color to use for the text. default: 1 (white)
+        @param spacing: The number of pixels between lines. default: 0
+        @param screenCenter： Center the text on the screen. default: False
+
+        \~chinese
+        在屏幕上打印一行文字或者多行文字
+        @param text: \n
+        @param xy:\n
+        @param align:\n
+        @param fontName:\n
+        @param fontSize:\n
+        @param fill:\n
+        @param spacing:\n
+        @param screenCenter:\n
+        
+        @param text: 要输出的文字，可以单行也可以多行。例如： "Hello World!"  或 "Hello/nWorld!"
+        @param xy: 文字输出的坐标点。默认： (0,0)
+        @param align: 多行文字对齐方式，可选： "left", "center" 或 "right". 默认： "left"
+        @param fontName: 字体名。默认：None（使用系统默认的字体） 
+        @param fontSize: 字体大小。默认：10
+        @param fill: 文字颜色。默认： 1 （白色）
+        @param spacing: 行间距。默认：0
+        @param screenCenter： 让文本位于屏幕居中。
+        """
+        tx = xy[0]
+        
+        try:
+            dwFont = font if font != None else SCR_DEF_FRONT if fontName==None else ImageFont.truetype(fontName, fontSize)
+        except:
+            dwFont = ImageFont.load_default()
+
+        try:
+            if screenCenter == True:
+                (fw, fh) = self.Canvas.multiline_textsize( text, font )
+                tx = xy[0] + (self._display_size[0]-fw)/2
+            self.Canvas.multiline_text( (tx, xy[1]) , text, font = dwFont, align=align, fill=fill, spacing=spacing)
+        except:
+            print("ERROR: canvas write error")

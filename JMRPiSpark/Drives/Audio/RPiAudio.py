@@ -24,7 +24,7 @@
 #
 # #########################################################
 #
-# RPi Spark Audio Device
+# RPi-Spark Audio Device
 #
 # @author: Kunpeng Zhang
 # 2018.4.15

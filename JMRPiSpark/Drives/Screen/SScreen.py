@@ -24,7 +24,7 @@
 #
 # #########################################################
 #
-#    RPi Spark ScreenBase
+#    RPi-Spark ScreenBase
 #    by Kunpeng Zhang
 #    v1.0.0
 #

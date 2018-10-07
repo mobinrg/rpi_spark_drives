@@ -24,7 +24,7 @@
 #
 # #########################################################
 #
-#    RPi Spark SSD1306Screen
+#    RPi-Spark SSD1306Screen
 #    by Kunpeng Zhang
 #    v1.0.0
 #

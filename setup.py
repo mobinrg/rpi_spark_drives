@@ -1,5 +1,5 @@
 #
-# RPi Spark pHAT Drives
+# RPi-Spark pHAT Drives
 # Author: Kunpeng Zhang
 # 2018.6.6
 #
@@ -38,7 +38,7 @@ desc = 'The Raspberry Pi Spark pHat board let you to easily develop interesting 
 
 setup (
 	name              = 'JMRPi.Spark',
-	version           = '1.0.5',
+	version           = '1.0.6',
 	author            = 'Kunpeng Zhang',
 	author_email      = 'support@mobinrg.com',
 	description       = desc,
