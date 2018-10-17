@@ -38,7 +38,7 @@ desc = 'The RPi-Spark pHat let you to easily develop interesting applications us
 
 setup (
 	name              = 'JMRPi.Spark',
-	version           = '1.0.7',
+	version           = '1.0.9',
 	author            = 'Kunpeng Zhang',
 	author_email      = 'support@mobinrg.com',
 	description       = desc,
@@ -49,6 +49,6 @@ setup (
 	keywords	  	  = keywords,
 	url               = 'https://github.com/mobinrg/rpi_spark_drives',
 	dependency_links  = [],
-	install_requires  = ["rpi.gpio","pillow"],
+	install_requires  = [],
 	packages          = find_packages()
 )

@@ -41,12 +41,21 @@ from PIL import ImageDraw
 from .SScreen import SScreenBase
 from .SScreen import SSRect
 
-SCR_DEF_FRONT = ImageFont.load_default()
+DEF_SCR_FRONT = ImageFont.load_default()
 
 class SSPILScreen( SScreenBase ):
     """!
-    \~english This class work with PIL Image Lib.
-    \~chinese 使用 PIL 库实现的 SScreen 类
+    \~english
+    This class work with PIL Image Lib.
+    All drawing operations of Canvas are implemented using the PIL graphics library, 
+    for example: line(), rectangle(), etc. 
+    Please see: https://pillow.readthedocs.io/en/3.0.x/reference/ImageDraw.html
+    
+    
+    \~chinese
+    使用 PIL 库实现的 SScreen 类
+    Canvas 的所有绘图操作使用 PIL 图形库实现，例如： line(), rectangle(), 等。 
+    请参阅： https://pillow.readthedocs.io/en/3.0.x/reference/ImageDraw.html
     """
 
     def _catchCurrentViewContent(self):
@@ -205,38 +214,73 @@ class SSPILScreen( SScreenBase ):
         @param text: Text to be drawn. eg. "Hello World!" or "Hello/nWorld!"
         @param xy: Top left corner of the text. defaule: (0,0)
         @param align: "left", "center" or "right". defaule: "left"
-        @param fontName: Font of text. defaule: None (default font) 
+        @param fontName: Name of font or font instance. defaule: None (use default font) 
         @param fontSize: Font size. default: 10
         @param fill: Color to use for the text. default: 1 (white)
         @param spacing: The number of pixels between lines. default: 0
-        @param screenCenter： Center the text on the screen. default: False
+        @param screenCenter： Keep the text center of screen. default: False
+        
+        @note
+        How to use screenCenter?
+        1. align="left"; screenCenter=False
+        <pre>
+        +---------------------------------+
+        |  Simple text line1              |
+        |  Simple line2                   |
+        |  Simple                         |
+        |                                 |
+        +---------------------------------+
+        </pre>
+        
+        2. align="left"; screenCenter=True
+        <pre>
+        +---------------------------------+
+        |        Simple text line1        |
+        |        Simple line2             |
+        |        Simple                   |
+        |                                 |
+        +---------------------------------+
+        </pre>
 
         \~chinese
-        在屏幕上打印一行文字或者多行文字
-        @param text: \n
-        @param xy:\n
-        @param align:\n
-        @param fontName:\n
-        @param fontSize:\n
-        @param fill:\n
-        @param spacing:\n
-        @param screenCenter:\n
-        
+        在屏幕上打印一行文字或多行文字        
         @param text: 要输出的文字，可以单行也可以多行。例如： "Hello World!"  或 "Hello/nWorld!"
         @param xy: 文字输出的坐标点。默认： (0,0)
         @param align: 多行文字对齐方式，可选： "left", "center" 或 "right". 默认： "left"
-        @param fontName: 字体名。默认：None（使用系统默认的字体） 
+        @param fontName: 字体名或字体对象实例。默认：None（使用系统默认的字体） 
         @param fontSize: 字体大小。默认：10
         @param fill: 文字颜色。默认： 1 （白色）
         @param spacing: 行间距。默认：0
-        @param screenCenter： 让文本位于屏幕居中。
+        @param screenCenter： 让文本居中屏幕。
+        
+        @note
+        screenCenter 效果示例：
+        1. align="left"; screenCenter=False
+        <pre>
+        +---------------------------------+
+        |  Simple text line1              |
+        |  Simple line2                   |
+        |  Simple                         |
+        |                                 |
+        +---------------------------------+
+        </pre>
+        
+        2. align="left"; screenCenter=True
+        <pre>
+        +---------------------------------+
+        |        Simple text line1        |
+        |        Simple line2             |
+        |        Simple                   |
+        |                                 |
+        +---------------------------------+
+        </pre>
         """
         tx = xy[0]
         
         try:
-            dwFont = font if font != None else SCR_DEF_FRONT if fontName==None else ImageFont.truetype(fontName, fontSize)
+            dwFont = font if font != None else DEF_SCR_FRONT if fontName==None else ImageFont.truetype(fontName, fontSize)
         except:
-            dwFont = ImageFont.load_default()
+            dwFont = DEF_SCR_FRONT
 
         try:
             if screenCenter == True:
