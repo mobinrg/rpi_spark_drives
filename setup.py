@@ -2,6 +2,7 @@
 # RPi-Spark pHAT Drives
 # Author: Kunpeng Zhang
 # 2018.6.6
+# 2020.7.18	Fix screenCenter incorrect error
 #
 
 from setuptools import setup, find_packages
@@ -38,7 +39,7 @@ desc = 'The RPi-Spark pHat let you to easily develop interesting applications us
 
 setup (
 	name              = 'JMRPi.Spark',
-	version           = '1.0.9',
+	version           = '1.0.10',
 	author            = 'Kunpeng Zhang',
 	author_email      = 'support@mobinrg.com',
 	description       = desc,

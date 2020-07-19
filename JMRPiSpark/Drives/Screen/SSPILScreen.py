@@ -284,7 +284,7 @@ class SSPILScreen( SScreenBase ):
 
         try:
             if screenCenter == True:
-                (fw, fh) = self.Canvas.multiline_textsize( text, font )
+                (fw, fh) = self.Canvas.multiline_textsize( text, dwFont )
                 tx = xy[0] + (self._display_size[0]-fw)/2
             self.Canvas.multiline_text( (tx, xy[1]) , text, font = dwFont, align=align, fill=fill, spacing=spacing)
         except:

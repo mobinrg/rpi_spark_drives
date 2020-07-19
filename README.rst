@@ -35,7 +35,7 @@ Drives:
 
 Supported:
 
-* Raspberry Pi 2 / 3 / 3+
+* Raspberry Pi 2/3/3+/4
 * Raspberry Pi Zero
 * Raspberry Pi Zero W
 
@@ -48,6 +48,7 @@ Requirements:
 
 History:
 
+* v1.0.10	2020.7	Fix "screenCenter" incorrect error in Screen.write()
 * v1.0.4	2018.7
 * v1.0.0	2018.6	first released
 
@@ -109,7 +110,7 @@ MIT license, all text above must be included in any redistribution
 
 支持的树梅派：
 
-* Raspberry Pi 2 / 3 / 3+
+* Raspberry Pi 2/3/3+/4
 * Raspberry Pi Zero
 * Raspberry Pi Zero W
 
@@ -121,6 +122,7 @@ MIT license, all text above must be included in any redistribution
 
 版本历史:
 
+* v1.0.10	2020.7	Fix "screenCenter" incorrect error in Screen.write()
 * v1.0.4	2018.7
 * v1.0.0	2018.6	第一次发布
 
@@ -182,13 +184,14 @@ MIT许可证，上述所有文本必须包含在任何重新发布中
 
 支持的樹梅派：
 
-* Raspberry Pi 2 / 3 / 3+
+* Raspberry Pi 2/3/3+/4
 * Raspberry Pi Zero
 * Raspberry Pi Zero W
 
 
 版本歷史:
 
+* v1.0.10	2020.7	Fix "screenCenter" incorrect error in Screen.write()
 * v1.0.4	2018.7
 * v1.0.0	2018.6 第一次發布
 
